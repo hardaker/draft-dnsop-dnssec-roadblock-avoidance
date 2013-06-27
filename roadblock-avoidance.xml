@@ -4,11 +4,12 @@
 ]>
 <?rfc strict="no" ?>
 <?rfc toc="yes" ?>
+<?rfc category="bcp" ?>
 <?rfc tocdepth="3" ?>
 <?rfc symrefs="yes" ?>
 <?rfc compact="yes" ?>
 <?rfc subcompact="no" ?>
-<rfc ipr="full3978" docName="draft-ietf-dnsext-ds-sha256-FILLVERSION.txt">
+<rfc ipr="full3978" docName="draft-hardaker-dnsop-dnssec-roadblock-avoidance-FILLVERSION.txt">
   <front>
     <title abbrev="DNSSEC Roadblock Avoidance">
       DNSSEC Roadblock Avoidance
@@ -44,7 +45,9 @@
   </front>
   <middle>
     <section title="Introduction">
-      <t>...
+      <t>This document describes problems with DNSSEC deployment due to
+        non-compliant infrastructure.  It poses potential detection and
+        midigation techniques.
       </t>
       <t>
 	The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT",
@@ -54,6 +57,73 @@
       </t>
     </section>
     <section title="Background">
+      <t>Deployment of DNSSEC today is hampered by network
+      architectures that make it difficult or sometimes impossible for
+      validating stub resolvers to effectively obtain the DNSSEC data
+      they need.  This occurs because neighboring recursive resolvers
+      are not fully DNSSEC compliant, or because "middle-boxes" active
+      block outbound traffic to the DNS port (53).</t>
+      <t>This document talks about ways of detecting the state of the
+      network a validating stub resolver might be attached to, and
+      ways to hopefully circumvent the problems associated with the
+      network defects it discovers.</t>
+    </section>
+
+    <section title="Detecting DNSSEC Non-Compilance">
+      <t>A validating stub resolver must fist determine what
+      bottlenecks exist that may hamper its ability to perform DNSSEC
+      lookups.  This section outlines tests that can be done to test
+      certain features of the surrounding network.</t>
+      <section title="Determining DNSSEC support in neighboring
+	recursive resolvers">
+	<t>Ideally, a validating stub resolver can make use of the
+	caching present in neighboring recursive resolvers.  This
+	section discusses the tests that such a recursive resolver
+	must pass in order to be fully usable as a near-by DNS
+	cache.</t>
+	<section title="Supports UDP">
+	</section>
+	<section title="Supports TCP">
+	</section>
+	<section title="Supports the DO bit">
+	</section>
+	<section title="Supports the AD bit">
+	</section>
+	<section title="Supports querying for RRSIGs">
+	</section>
+	<section title="Supports EDNS0">
+	</section>
+	<section title="Supports queries returning NSEC records">
+	</section>
+	<section title="Supports queries returning NSEC3 records">
+	</section>
+	<section title="Supports querying for DNSKEY records">
+	</section>
+	<section title="Supports querying for DS records">
+	</section>
+	<section title="Supports queries returning DNAME records">
+	</section>
+      </section>
+      <section title="Direct Network Queries">
+	<t>If need be, a validating stub resolver may need to make
+	direct queries to authoritative servers in order to collect
+	the data they require.  To do that, a number of key network
+	features must be functional.</t>
+	<section title="Outbound UDP Support Over Port 53">
+	</section>
+	<section title="Inbound UDP Support With Fragmentation">
+	</section>
+	<section title="Outbound TCP Support Over Port 53">
+	</section>
+      </section>
+    </section>
+
+    <section title="Roadblock Avoidance">
+      <t>Once we have determined what level of support is available in
+      the neighboring network, we can determine what must be done in
+      order to effectively act as a validating resolver.  This section
+      discusses some of the options available given the results from
+      the previous sections.</t>
     </section>
 
     <section title="IANA Considerations">
@@ -66,7 +136,7 @@
       used to help detect and midigate these problems.  Following
       these suggestions should result in a more secure DNSSEC
       operational environment than if DNSSEC was simply disabled when
-      it failed to perform as expected.</t>
+      it fails to perform as expected.</t>
     </section>
     
     <section title="Acknowledgments">
