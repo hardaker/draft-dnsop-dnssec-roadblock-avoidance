@@ -1,6 +1,6 @@
 MONTH=`date +"%B"`
 YEAR=`date +"%Y"`
-VERSION=01
+VERSION=00
 DRAFT=draft-hardaker-dnsop-dnssec-roadblock-avoidance-$(VERSION).txt
 
 all: draft-hardaker-dnsop-dnssec-roadblock-avoidance-$(VERSION).txt check
