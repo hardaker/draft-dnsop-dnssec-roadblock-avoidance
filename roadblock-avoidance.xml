@@ -9,7 +9,7 @@
 <?rfc symrefs="yes" ?>
 <?rfc compact="yes" ?>
 <?rfc subcompact="no" ?>
-<rfc ipr="full3978" docName="draft-hardaker-dnsop-dnssec-roadblock-avoidance-FILLVERSION.txt">
+<rfc ipr="trust200902" docName="draft-hardaker-dnsop-dnssec-roadblock-avoidance-FILLVERSION.txt">
   <front>
     <title abbrev="DNSSEC Roadblock Avoidance">
       DNSSEC Roadblock Avoidance
