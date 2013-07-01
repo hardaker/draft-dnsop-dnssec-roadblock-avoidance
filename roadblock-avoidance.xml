@@ -92,7 +92,6 @@
 	  <t>SUCCESS: A DNS response was received that contains an a A
 	  record in the answer section.  (The data itself does not need
 	  to be checked.)</t>
-	  <t>FAIL: otherwise</t>
 	  <t>Note: an implementation MAY chose to not perform the rest
 	  of the tests if this test fails, as clearly the resolver
 	  under test is severely broken.</t>
@@ -106,7 +105,6 @@
 	  <t>SUCCESS: A DNS response was received that contains an a A
 	  record in the answer section.  (The data itself does not need
 	  to be checked.)</t>
-	  <t>FAIL: otherwise</t>
 	</section>
 	<section title="Supports the DO bit">
 	  <t>Purpose: This tests weather has minimal support of the DO bit.
@@ -116,7 +114,6 @@
 	  Set the DO bit in the outgoing query.</t>
 	  <t>SUCCESS: A DNS response was received that contains the DO
 	  bit set.</t>
-	  <t>FAIL: otherwise</t>
 	  <t>Note: this only tests that the resolver sets the DO bit
 	  in the response.  Later checks will determine if the DO bit
 	  was actually made use of.  Some resolvers successfully pass
@@ -135,7 +132,6 @@
 
 	  <t>SUCCESS: A DNS response was received that contains the AD
 	  bit set.</t>
-	  <t>FAIL: otherwise</t>
 	</section>
 	<section title="Supports querying for RRSIGs">
 	  <t>Purpose: This tests whether a resolver will properly return RRSIG
@@ -147,7 +143,6 @@
 
 	  <t>SUCCESS: A DNS response was received that contains at
 	  least one RRSIG record.</t>
-	  <t>FAIL: otherwise</t>
 	</section>
 	<section title="Supports EDNS0">
 	  <t>Purpose: This tests whether a resolver properly supports the EDNS0
@@ -163,7 +158,6 @@
 	  reason a local resolver needs to support accepting large
 	  packets from the querying client; they only need to do so
 	  for *their* outgoing requests.</t>
-	  <t>FAIL: otherwise</t>
 	</section>
 	<section title="Supports queries returning NSEC records">
 	  <t>Purpose: This tests whether a resolver properly returns
@@ -173,7 +167,6 @@
 	  bogusdnstest.dnssec-tools.org.</t>
 	  <t>SUCCESS: A DNS response was received that contains an
 	  NSEC record.</t>
-	  <t>FAIL: otherwise</t>
 	</section>
 	<section title="Supports queries returning NSEC3 records">
 	  <t>Purpose: This tests whether a resolver properly returns
@@ -183,7 +176,6 @@
 	  foobardedabadoo.org.</t>
 	  <t>SUCCESS: A DNS response was received that contains an
 	  NSEC3 record.</t>
-	  <t>FAIL: otherwise</t>
 	</section>
 	<section title="Supports querying for DNSKEY records">
 	  <t>Purpose: This tests whether a resolver can query for and
@@ -193,7 +185,6 @@
 	  dnssec-tools.org/DNSKEY.</t>
 	  <t>SUCCESS: A DNS response was received that contains a
 	   DNSKEY record in the answer section.</t>
-	  <t>FAIL: otherwise</t>
 	</section>
 	<section title="Supports querying for DS records">
 	  <t>Purpose: This tests whether a resolver can query for and
@@ -203,7 +194,6 @@
 	  dnssec-tools.org/DS.</t>
 	  <t>SUCCESS: A DNS response was received that contains a
 	   DS record in the answer section.</t>
-	  <t>FAIL: otherwise</t>
 	</section>
 	<section title="Supports queries returning DNAME records">
 	  <t>Purpose: This tests whether a resolver can query for an A
@@ -216,7 +206,6 @@
 	  <t>SUCCESS: A DNS response was received that contains a
 	   DNAME in the answer section.  An RRSIG must also be
 	  received in the answer section that covers the DNAME record.</t>
-	  <t>FAIL: otherwise</t>
 	</section>
       </section>
       <section title="Direct Network Queries">
