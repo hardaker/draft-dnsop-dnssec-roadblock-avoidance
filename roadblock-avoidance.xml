@@ -175,7 +175,8 @@
 	</section>
 	<section title="Supports queries returning NSEC3 records">
 	  <t>Purpose: This tests whether a resolver properly returns
-	  NSEC3 records (<xref target="RFC5155" />) for a non-existing domain in a DNSSEC signed zone.</t>
+	  NSEC3 records (<xref target="RFC5155" />) for a non-existing
+	  domain in a DNSSEC signed zone.</t>
 	  <t>Test: Send a request to the resolver under test for an A
 	  record which is known to not existing, such as
 	  foobardedabadoo.org.</t>
