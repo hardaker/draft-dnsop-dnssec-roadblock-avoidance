@@ -119,7 +119,7 @@
 	  in the response.  Later checks will determine if the DO bit
 	  was actually made use of.  Some resolvers successfully pass
 	  this test because they simply copy the unknown flags into
-	  the response.  Don't worry, they'll fail the later tests.
+	  the response.  Don't worry, they'll fail the later tests.</t>
 	</section>
 	<section title="Supports the AD bit">
 	  <t>Purpose: This weather the resolver is a validating
@@ -164,8 +164,24 @@
 	  <t>FAIL: otherwise</t>
 	</section>
 	<section title="Supports queries returning NSEC records">
+	  <t>Purpose: This tests whether a resolver properly returns
+	  NSEC records for a non-existing domain in a DNSSEC signed zone.</t>
+	  <t>Test: Send a request to the resolver under test for an A
+	  record which is known to not existing, such as
+	  bogusdnstest.dnssec-tools.org.</t>
+	  <t>SUCCESS: A DNS response was received that contains an
+	  NSEC record.</t>
+	  <t>FAIL: otherwise</t>
 	</section>
 	<section title="Supports queries returning NSEC3 records">
+	  <t>Purpose: This tests whether a resolver properly returns
+	  NSEC3 records for a non-existing domain in a DNSSEC signed zone.</t>
+	  <t>Test: Send a request to the resolver under test for an A
+	  record which is known to not existing, such as
+	  foobardedabadoo.org.</t>
+	  <t>SUCCESS: A DNS response was received that contains an
+	  NSEC3 record.</t>
+	  <t>FAIL: otherwise</t>
 	</section>
 	<section title="Supports querying for DNSKEY records">
 	</section>
