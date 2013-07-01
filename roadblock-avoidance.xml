@@ -82,7 +82,8 @@
 	must pass in order to be fully usable as a near-by DNS
 	cache.</t>
 	<t>Unless stated otherwise, all of the following tests should
-	have the recursive flag set when sending out a query.</t>
+	have the recursive flag set when sending out a query.  Unless
+	stated otherwise, the request should be sent over UDP.</t>
 	<section title="Supports UDP">
 	  <t>Purpose: This tests basic UDP functionality to a resolver.  </t>
 	  <t>Test: A DNS
@@ -99,7 +100,7 @@
 	<section title="Supports TCP">
 	  <t>Purpose: This tests basic TCP functionality to a resolver.  </t>
 	  <t>Test: A DNS
-	  request should be sent to the resolver under test for an A
+	  request should be sent over TCP to the resolver under test for an A
 	  record for a known existing domain, such as
 	  www.dnssec-tools.org.</t>
 	  <t>SUCCESS: A DNS response was received that contains an a A
@@ -214,10 +215,36 @@
 	the data they require.  To do that, a number of key network
 	features must be functional.</t>
 	<section title="Outbound UDP Support Over Port 53">
+	  <t>Purpose: This tests basic UDP functionality to outside
+	  the local network.</t>
+	  <t>Test: A DNS
+	  request should be sent to a known distant authoritative
+	  server for a record known to be within that server's
+	  authoritative data.  Example: send a query to the address of
+	  ns1.dnssec-tools.org for the www.dnssec-tools.org/A record.</t>
+	  <t>SUCCESS: A DNS response was received that contains an a A
+	  record in the answer section.</t>
+	  <t>Note: an implementation can used the local resolvers for
+	  determining the address of the name server that is
+	  authoritative for the given zone.  The recursive bit MAY be
+	  set for this request, but does not need to be.</t>
 	</section>
 	<section title="Inbound UDP Support With Fragmentation">
 	</section>
 	<section title="Outbound TCP Support Over Port 53">
+	  <t>Purpose: This tests basic TCP functionality to outside
+	  the local network.</t>
+	  <t>Test: A DNS
+	  request should be sent over TCP to a known distant authoritative
+	  server for a record known to be within that server's
+	  authoritative data.  Example: send a query to the address of
+	  ns1.dnssec-tools.org for the www.dnssec-tools.org/A record.</t>
+	  <t>SUCCESS: A DNS response was received that contains an a A
+	  record in the answer section.</t>
+	  <t>Note: an implementation can used the local resolvers for
+	  determining the address of the name server that is
+	  authoritative for the given zone.  The recursive bit MAY be
+	  set for this request, but does not need to be.</t>
 	</section>
       </section>
     </section>
