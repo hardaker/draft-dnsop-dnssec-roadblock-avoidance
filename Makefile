@@ -7,6 +7,7 @@ all: draft-hardaker-dnsop-dnssec-roadblock-avoidance-$(VERSION).txt check
 
 $(DRAFT): roadblock-avoidance-tmp.xml
 	xml2rfc $< $@
+	mv roadblock-avoidance-tmp.txt $@
 
 find-long-lines: roadblock-avoidance-tmp.xml
 	perl -p -i.bak -e 's/strict="yes"/strict="no"/' roadblock-avoidance-tmp.xml
