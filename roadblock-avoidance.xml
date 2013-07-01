@@ -158,6 +158,10 @@
     </section>
     
     <section title="Acknowledgments">
+      <t>Many of the tests in this document were designed during many
+      discussions with Ólafur Guðmundsson, without whom these tests
+      would be significantly less complete.</t>
+
       <t>Multiple lessons learned from multiple implementations led to
       the development of this document, including (in alphabetical
       order) DNSSEC-Tools, dnssec-trigger, ...
