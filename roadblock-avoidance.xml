@@ -84,7 +84,7 @@
 	<section title="Supports UDP">
 	  <t>This tests basic UDP functionality to a resolver.  A DNS
 	  request should be sent to the resolver under test for an A
-	  record for a known existing record, such as
+	  record for a known existing domain, such as
 	  www.dnssec-tools.org.</t>
 	  <t>SUCCESS: A DNS response was received that contains an a A
 	  record in the answer section.  (The data itself does not need
@@ -97,19 +97,65 @@
 	<section title="Supports TCP">
 	  <t>This tests basic TCP functionality to a resolver.  A DNS
 	  request should be sent to the resolver under test for an A
-	  record for a known existing record, such as
+	  record for a known existing domain, such as
 	  www.dnssec-tools.org.</t>
 	  <t>SUCCESS: A DNS response was received that contains an a A
 	  record in the answer section.  (The data itself does not need
 	  to be checked.)</t>
+	  <t>FAIL: otherwise</t>
 	</section>
 	<section title="Supports the DO bit">
+	  <t>To test weather or not the resolver supports the DO bit,
+	  send a request to the resolver under test for an A record
+	  for a known existing domain such as www.dnssec-tools.org.
+	  Set the DO bit in the outgoing query.</t>
+	  <t>SUCCESS: A DNS response was received that contains the DO
+	  bit set.</t>
+	  <t>FAIL: otherwise</t>
+	  <t>Note: this only tests that the resolver sets the DO bit
+	  in the response.  Later checks will determine if the DO bit
+	  was actually made use of.  Some resolvers successfully pass
+	  this test because they simply copy the unknown flags into
+	  the response.  Don't worry, they'll fail the later tests.
 	</section>
 	<section title="Supports the AD bit">
+	  <t>To test weather or not the resolver is a validating
+	  resolver, send a request to the resolver under test for an A
+	  record for a known existing domain in a DNSSEC signed zone
+	  which is verifiable to a configured trust anchor, such as
+	  www.dnssec-tools.org using the root's published DNSKEY or DS
+	  record as a trust anchor.  Set the DO bit in the outgoing
+	  query.</t>
+
+	  <t>SUCCESS: A DNS response was received that contains the AD
+	  bit set.</t>
+	  <t>FAIL: otherwise</t>
 	</section>
 	<section title="Supports querying for RRSIGs">
+	  <t>To test whether a resolver will properly return RRSIG
+	  records with the DO bit set, send a request to the resolver
+	  under test for an A record for a known existing domain in a
+	  DNSSEC signed zone, such as www.dnssec-tools.org.  Set the
+	  DO bit in the outgoing query.</t>
+
+	  <t>SUCCESS: A DNS response was received that contains at
+	  least one RRSIG record.</t>
+	  <t>FAIL: otherwise</t>
 	</section>
 	<section title="Supports EDNS0">
+	  <t>To test whether a resolver properly supports the EDNS0
+	  extension, send a request to the resolver under test for an
+	  A record for a known existing domain, such as
+	  www.dnssec-tools.org.</t>
+
+	  <t>SUCCESS: A DNS response was received that contains at
+	  an EDNS0 option with version number 0.</t>
+	  <t>WARNING???: if the EDNS0 size returned was less than
+	  1480. XXX: this will probably go away, since there is no
+	  reason a local resolver needs to support accepting large
+	  packets from the querying client; they only need to do so
+	  for *their* outgoing requests.</t>
+	  <t>FAIL: otherwise</t>
 	</section>
 	<section title="Supports queries returning NSEC records">
 	</section>
