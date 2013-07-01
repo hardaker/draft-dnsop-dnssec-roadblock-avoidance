@@ -1,6 +1,9 @@
 <?xml version="1.0"?>
 <!DOCTYPE rfc SYSTEM "rfc2629.dtd" [
   <!ENTITY rfc2119 PUBLIC '' 'reference.RFC.2119.xml'>
+  <!ENTITY rfc4034 PUBLIC '' 'reference.RFC.4034.xml'>
+  <!ENTITY rfc4035 PUBLIC '' 'reference.RFC.4035.xml'>
+  <!ENTITY rfc5155 PUBLIC '' 'reference.RFC.5155.xml'>
 ]>
 <?rfc strict="no" ?>
 <?rfc toc="yes" ?>
@@ -45,7 +48,8 @@
   </front>
   <middle>
     <section title="Introduction">
-      <t>This document describes problems with DNSSEC deployment due to
+      <t>This document describes problems with DNSSEC (<xref
+      target="RFC4034" />, <xref target="RFC4035" />) deployment due to
         non-compliant infrastructure.  It poses potential detection and
         midigation techniques.
       </t>
@@ -171,7 +175,7 @@
 	</section>
 	<section title="Supports queries returning NSEC3 records">
 	  <t>Purpose: This tests whether a resolver properly returns
-	  NSEC3 records for a non-existing domain in a DNSSEC signed zone.</t>
+	  NSEC3 records (<xref target="RFC5155" />) for a non-existing domain in a DNSSEC signed zone.</t>
 	  <t>Test: Send a request to the resolver under test for an A
 	  record which is known to not existing, such as
 	  foobardedabadoo.org.</t>
@@ -296,6 +300,9 @@
   <back>
     <references title="Normative References">
       &rfc2119;
+      &rfc4034;
+      &rfc4035;
+      &rfc5155;
     </references>
   </back>
 </rfc>
