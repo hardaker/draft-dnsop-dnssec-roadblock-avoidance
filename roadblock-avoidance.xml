@@ -182,6 +182,13 @@
       </section>
     </section>
 
+    <section title="Aggregating The Results">
+      <t>Some conclusions can be drawn from the results of the above
+      tests in an "aggregated" form.  This section defines some labels
+      to assign to a resolver under test given the results of the
+      tests run against them.</t>
+    </section>
+
     <section title="Roadblock Avoidance">
       <t>Once we have determined what level of support is available in
       the neighboring network, we can determine what must be done in
