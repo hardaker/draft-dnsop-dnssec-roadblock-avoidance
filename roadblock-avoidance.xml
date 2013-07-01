@@ -81,6 +81,8 @@
 	section discusses the tests that such a recursive resolver
 	must pass in order to be fully usable as a near-by DNS
 	cache.</t>
+	<t>Unless stated otherwise, all of the following tests should
+	have the recursive flag set when sending out a query.</t>
 	<section title="Supports UDP">
 	  <t>Purpose: This tests basic UDP functionality to a resolver.  </t>
 	  <t>Test: A DNS
@@ -184,10 +186,37 @@
 	  <t>FAIL: otherwise</t>
 	</section>
 	<section title="Supports querying for DNSKEY records">
+	  <t>Purpose: This tests whether a resolver can query for and
+	  receive a DNSKEY record from a signed zone.</t>
+	  <t>Test: Send a request to the resolver under test for an DNSKEY
+	  record which is known to exist in a signed zone, such as
+	  dnssec-tools.org/DNSKEY.</t>
+	  <t>SUCCESS: A DNS response was received that contains a
+	   DNSKEY record in the answer section.</t>
+	  <t>FAIL: otherwise</t>
 	</section>
 	<section title="Supports querying for DS records">
+	  <t>Purpose: This tests whether a resolver can query for and
+	  receive a DS record from a signed zone.</t>
+	  <t>Test: Send a request to the resolver under test for an DS
+	  record which is known to exist in a signed zone, such as
+	  dnssec-tools.org/DS.</t>
+	  <t>SUCCESS: A DNS response was received that contains a
+	   DS record in the answer section.</t>
+	  <t>FAIL: otherwise</t>
 	</section>
 	<section title="Supports queries returning DNAME records">
+	  <t>Purpose: This tests whether a resolver can query for an A
+	  record in a zone with a known DNAME referral for the record's
+	  parent.</t>
+	  <t>Test: Send a request to the resolver under test for an A
+	  record which is known to exist in a signed zone within a
+	  DNAME referral child zone, such as
+	  good-a.dname-good-ns.test.dnssec-tools.net.</t>
+	  <t>SUCCESS: A DNS response was received that contains a
+	   DNAME in the answer section.  An RRSIG must also be
+	  received in the answer section that covers the DNAME record.</t>
+	  <t>FAIL: otherwise</t>
 	</section>
       </section>
       <section title="Direct Network Queries">
