@@ -82,8 +82,26 @@
 	must pass in order to be fully usable as a near-by DNS
 	cache.</t>
 	<section title="Supports UDP">
+	  <t>This tests basic UDP functionality to a resolver.  A DNS
+	  request should be sent to the resolver under test for an A
+	  record for a known existing record, such as
+	  www.dnssec-tools.org.</t>
+	  <t>SUCCESS: A DNS response was received that contains an a A
+	  record in the answer section.  (The data itself does not need
+	  to be checked.)</t>
+	  <t>FAIL: otherwise</t>
+	  <t>Note: an implementation MAY chose to not perform the rest
+	  of the tests if this test fails, as clearly the resolver
+	  under test is severely broken.</t>
 	</section>
 	<section title="Supports TCP">
+	  <t>This tests basic TCP functionality to a resolver.  A DNS
+	  request should be sent to the resolver under test for an A
+	  record for a known existing record, such as
+	  www.dnssec-tools.org.</t>
+	  <t>SUCCESS: A DNS response was received that contains an a A
+	  record in the answer section.  (The data itself does not need
+	  to be checked.)</t>
 	</section>
 	<section title="Supports the DO bit">
 	</section>
