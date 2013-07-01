@@ -82,7 +82,8 @@
 	must pass in order to be fully usable as a near-by DNS
 	cache.</t>
 	<section title="Supports UDP">
-	  <t>This tests basic UDP functionality to a resolver.  A DNS
+	  <t>Purpose: This tests basic UDP functionality to a resolver.  </t>
+	  <t>Test: A DNS
 	  request should be sent to the resolver under test for an A
 	  record for a known existing domain, such as
 	  www.dnssec-tools.org.</t>
@@ -95,7 +96,8 @@
 	  under test is severely broken.</t>
 	</section>
 	<section title="Supports TCP">
-	  <t>This tests basic TCP functionality to a resolver.  A DNS
+	  <t>Purpose: This tests basic TCP functionality to a resolver.  </t>
+	  <t>Test: A DNS
 	  request should be sent to the resolver under test for an A
 	  record for a known existing domain, such as
 	  www.dnssec-tools.org.</t>
@@ -105,8 +107,9 @@
 	  <t>FAIL: otherwise</t>
 	</section>
 	<section title="Supports the DO bit">
-	  <t>To test weather or not the resolver supports the DO bit,
-	  send a request to the resolver under test for an A record
+	  <t>Purpose: This tests weather has minimal support of the DO bit.
+	  </t>
+	  <t>Test: send a request to the resolver under test for an A record
 	  for a known existing domain such as www.dnssec-tools.org.
 	  Set the DO bit in the outgoing query.</t>
 	  <t>SUCCESS: A DNS response was received that contains the DO
@@ -119,8 +122,9 @@
 	  the response.  Don't worry, they'll fail the later tests.
 	</section>
 	<section title="Supports the AD bit">
-	  <t>To test weather or not the resolver is a validating
-	  resolver, send a request to the resolver under test for an A
+	  <t>Purpose: This weather the resolver is a validating
+	  resolver.</t>
+	  <t>Test: Send a request to the resolver under test for an A
 	  record for a known existing domain in a DNSSEC signed zone
 	  which is verifiable to a configured trust anchor, such as
 	  www.dnssec-tools.org using the root's published DNSKEY or DS
@@ -132,8 +136,9 @@
 	  <t>FAIL: otherwise</t>
 	</section>
 	<section title="Supports querying for RRSIGs">
-	  <t>To test whether a resolver will properly return RRSIG
-	  records with the DO bit set, send a request to the resolver
+	  <t>Purpose: This tests whether a resolver will properly return RRSIG
+	  records when the DO bit is set.</t>
+	  <t>Test: Send a request to the resolver
 	  under test for an A record for a known existing domain in a
 	  DNSSEC signed zone, such as www.dnssec-tools.org.  Set the
 	  DO bit in the outgoing query.</t>
@@ -143,8 +148,9 @@
 	  <t>FAIL: otherwise</t>
 	</section>
 	<section title="Supports EDNS0">
-	  <t>To test whether a resolver properly supports the EDNS0
-	  extension, send a request to the resolver under test for an
+	  <t>Purpose: This tests whether a resolver properly supports the EDNS0
+	  extension option.</t>
+	  <t>Test: Send a request to the resolver under test for an
 	  A record for a known existing domain, such as
 	  www.dnssec-tools.org.</t>
 
