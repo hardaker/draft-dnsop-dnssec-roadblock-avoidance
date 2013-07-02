@@ -73,7 +73,28 @@
       network defects it discovers.</t>
     </section>
 
-    <section title="Detecting DNSSEC Non-Compilance">
+    <section title="Goals">
+      <t>The result of this work is intended to show how a validating
+      stub resolver can interact with a nearby recursive resolver
+      whenever possible.  This enables the validating stub resolver to
+      make use of the caching functionality in the recursive resolver,
+      which decreases network traffic and increases response
+      times.</t>
+
+      <t>A validating stub resolver has two choices: it can wait to
+      determine that it has problems with a recursive resolver based
+      on the results that it is getting from legitimate queries issued
+      to it, or it can proactively test for problems (Section <xref
+      target="tests" />) to build a work around list ahead of time
+      (Section <xref target="solutions" />).  There are pros and cons
+      to both these paths that are application specific, and this
+      document does not attempt to provide guidance about whether
+      proactive tests should or should not be used.  Either way,
+      however, DNSSEC roadblock avoidance techniques should be used
+      when needed and if possible.</t>
+    </section>
+
+    <section title="Detecting DNSSEC Non-Compilance" anchor="tests">
       <t>A validating stub resolver must fist determine what
       bottlenecks exist that may hamper its ability to perform DNSSEC
       lookups.  This section outlines tests that can be done to test
@@ -261,7 +282,7 @@
       tests run against them.</t>
     </section>
 
-    <section title="Roadblock Avoidance">
+    <section title="Roadblock Avoidance" anchor="solutions">
       <t>Once we have determined what level of support is available in
       the neighboring network, we can determine what must be done in
       order to effectively act as a validating resolver.  This section
