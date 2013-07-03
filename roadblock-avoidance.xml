@@ -177,11 +177,6 @@
 
 	  <t>SUCCESS: A DNS response was received that contains at
 	  an EDNS0 option with version number 0.</t>
-	  <t>WARNING???: if the EDNS0 size returned was less than
-	  1480. XXX: this will probably go away, since there is no
-	  reason a local resolver needs to support accepting large
-	  packets from the querying client; they only need to do so
-	  for *their* outgoing requests.</t>
 	</section>
 	<section title="Supports queries returning NSEC records">
 	  <t>Purpose: This tests whether a resolver properly returns
