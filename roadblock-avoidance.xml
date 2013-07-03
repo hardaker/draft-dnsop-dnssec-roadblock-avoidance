@@ -98,8 +98,7 @@
       bottlenecks exist that may hamper its ability to perform DNSSEC
       lookups.  This section outlines tests that can be done to test
       certain features of the surrounding network.</t>
-      <section title="Determining DNSSEC support in neighboring
-	recursive resolvers">
+      <section title="Determining DNSSEC support in neighboring recursive resolvers">
 	<t>Ideally, a validating stub resolver can make use of the
 	caching present in neighboring recursive resolvers.  This
 	section discusses the tests that such a recursive resolver
