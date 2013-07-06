@@ -29,19 +29,33 @@
         <email>hardaker@tislabs.com</email>
       </address>
     </author>
-    <date month="January" year="1970"/>
-    <!--
-    <area ...>
-    <workgroup ...>
-    <keyword ...>
-    <keyword ...>
-    -->
+    <author initials="O." surname="Gudmundsson" fullname="Olafur Gudmundsson">
+      <organization>Shinkuro Inc.</organization>
+      <address>
+        <postal>
+          <street>4922 Fairmont Av, Suite 250</street>
+          <city>Bethesda</city>
+          <region>MD</region>
+          <code>20814</code>
+          <country>USA</country>
+        </postal>
+
+        <email>ogud@ogud.com</email>
+      </address>
+    </author>
+    <date day="4" month="July" year="2013"/>
+    <area> OPS </area>
+    <workgroup>DNSOP </workgroup> 
+    <keyword>DNSSEC, Network Problems, DNS </keyword> 
     <abstract>
       <!-- $Revision: 1.28 $ -->
       <t>
-        This document describes problems with DNSSEC deployment due to
+        This document describes problems that a DNSSEC aware
+        resolver/application might run into to
         non-compliant infrastructure.  It poses potential detection and
-        mitigation techniques.
+        mitigation techniques. The scope of the document is to create
+        a shared approaches to detect and overcome network issues that
+        a DNSSEC software/system may face. 
       </t>
     </abstract>
   </front>
@@ -61,20 +75,40 @@
     </section>
     <section title="Background">
       <t>Deployment of DNSSEC today is hampered by network
-      architectures that make it difficult or sometimes impossible for
+      components that make it difficult or sometimes impossible for
       validating stub resolvers to effectively obtain the DNSSEC data
-      they need.  This occurs because neighboring recursive resolvers
-      are not fully DNSSEC compliant, or because "middle-boxes" active
-      block outbound traffic to the DNS port (53).</t>
+      they need.  This can occur for many different reasons including 
+	<list style="symbols"> 
+          <t> because neighboring recursive resolvers are not fully
+	    DNSSEC compliant </t> 
+          <t>because "middle-boxes" active block outbound traffic to
+            the DNS port (53) either UDP and/or TCP .</t>
+          <t> Network component in path does not allow UDP
+	    fragments</t> 
+          <t>Resolver is not DNSSEC aware</t> 
+          <t> etc. </t>
+        </list> 
+      </t>
       <t>This document talks about ways of detecting the state of the
       network a validating stub resolver might be attached to, and
       ways to hopefully circumvent the problems associated with the
       network defects it discovers.</t>
     </section>
 
+    <section title="Notation"> 
+      <t> When we talk about Validating Stub Resovler this can
+	either be a library that an application has linked in or an
+	actual resovler running on the same machine. </t> 
+      <t> A variant of this is a Validating Forwarding Resolver,
+	this is a resovler that is configured to use upstream
+	Resolvers if possible. </t> 
+      <t> ???? should we use the words Host Validator to cover all of
+	these ? </t> 
+    </section> 
+
     <section title="Goals">
       <t>The result of this work is intended to show how a validating
-      stub resolver can interact with a nearby recursive resolver
+      stub resolver can detect the capabilities of a nearby recursive resolver
       whenever possible.  This enables the validating stub resolver to
       make use of the caching functionality in the recursive resolver,
       which decreases network traffic and increases response
@@ -107,8 +141,8 @@
 	<t>Unless stated otherwise, all of the following tests should
 	have the recursive flag set when sending out a query.  Unless
 	stated otherwise, the request should be sent over UDP.</t>
-	<section title="Supports UDP">
-	  <t>Purpose: This tests basic UDP functionality to a resolver.  </t>
+	<section title="Supports UDP answers">
+	  <t>Purpose: This tests basic DNS over UDP functionality to a resolver.  </t>
 	  <t>Test: A DNS
 	  request should be sent to the resolver under test for an A
 	  record for a known existing domain, such as
@@ -120,7 +154,7 @@
 	  of the tests if this test fails, as clearly the resolver
 	  under test is severely broken.</t>
 	</section>
-	<section title="Supports TCP">
+	<section title="Supports TCP answers">
 	  <t>Purpose: This tests basic TCP functionality to a resolver.  </t>
 	  <t>Test: A DNS
 	  request should be sent over TCP to the resolver under test for an A
@@ -130,9 +164,23 @@
 	  record in the answer section.  (The data itself does not need
 	  to be checked.)</t>
 	</section>
+
+	<section title="Supports EDNS0">
+	  <t>Purpose: Test whether a resolver properly supports the EDNS0
+	  extension option.</t>
+	  <t> Pre-requisite: "Supports UDP or TCP".</t>
+	  <t>Test: Send a request to the resolver under test for an
+	  A record for a known existing domain, such as
+	  www.dnssec-tools.org, with ENDS0 OPT record in the additional section..</t>
+
+	  <t>SUCCESS: A DNS response was received that contains at
+	  an EDNS0 option with version number 0.</t>
+	</section>
+
 	<section title="Supports the DO bit">
 	  <t>Purpose: This tests weather has minimal support of the DO bit.
 	  </t>
+	  <t> Pre-requisite: "Supports ENDS0".</t>
 	  <t>Test: send a request to the resolver under test for an A record
 	  for a known existing domain such as www.dnssec-tools.org.
 	  Set the DO bit in the outgoing query.</t>
@@ -144,9 +192,11 @@
 	  this test because they simply copy the unknown flags into
 	  the response.  Don't worry, they'll fail the later tests.</t>
 	</section>
+
 	<section title="Supports the AD bit">
 	  <t>Purpose: This weather the resolver is a validating
 	  resolver.</t>
+	  <t>Pre-requisite: "Supports EDNS0".</t>
 	  <t>Test: Send a request to the resolver under test for an A
 	  record for a known existing domain in a DNSSEC signed zone
 	  which is verifiable to a configured trust anchor, such as
@@ -157,9 +207,11 @@
 	  <t>SUCCESS: A DNS response was received that contains the AD
 	  bit set.</t>
 	</section>
-	<section title="Supports querying for RRSIGs">
+
+	<section title="Returns RRsig for signed answer">
 	  <t>Purpose: This tests whether a resolver will properly return RRSIG
 	  records when the DO bit is set.</t>
+	  <t>Pre-requisite: "Supports DO bit".</t>
 	  <t>Test: Send a request to the resolver
 	  under test for an A record for a known existing domain in a
 	  DNSSEC signed zone, such as www.dnssec-tools.org.  Set the
@@ -168,38 +220,11 @@
 	  <t>SUCCESS: A DNS response was received that contains at
 	  least one RRSIG record.</t>
 	</section>
-	<section title="Supports EDNS0">
-	  <t>Purpose: This tests whether a resolver properly supports the EDNS0
-	  extension option.</t>
-	  <t>Test: Send a request to the resolver under test for an
-	  A record for a known existing domain, such as
-	  www.dnssec-tools.org.</t>
 
-	  <t>SUCCESS: A DNS response was received that contains at
-	  an EDNS0 option with version number 0.</t>
-	</section>
-	<section title="Supports queries returning NSEC records">
-	  <t>Purpose: This tests whether a resolver properly returns
-	  NSEC records for a non-existing domain in a DNSSEC signed zone.</t>
-	  <t>Test: Send a request to the resolver under test for an A
-	  record which is known to not existing, such as
-	  bogusdnstest.dnssec-tools.org.</t>
-	  <t>SUCCESS: A DNS response was received that contains an
-	  NSEC record.</t>
-	</section>
-	<section title="Supports queries returning NSEC3 records">
-	  <t>Purpose: This tests whether a resolver properly returns
-	  NSEC3 records (<xref target="RFC5155" />) for a non-existing
-	  domain in a DNSSEC signed zone.</t>
-	  <t>Test: Send a request to the resolver under test for an A
-	  record which is known to not existing, such as
-	  foobardedabadoo.org.</t>
-	  <t>SUCCESS: A DNS response was received that contains an
-	  NSEC3 record.</t>
-	</section>
 	<section title="Supports querying for DNSKEY records">
 	  <t>Purpose: This tests whether a resolver can query for and
 	  receive a DNSKEY record from a signed zone.</t>
+	  <t>Pre-requiste: "Supports DO bit."</t>
 	  <t>Test: Send a request to the resolver under test for an DNSKEY
 	  record which is known to exist in a signed zone, such as
 	  dnssec-tools.org/DNSKEY.</t>
@@ -208,14 +233,51 @@
 	</section>
 	<section title="Supports querying for DS records">
 	  <t>Purpose: This tests whether a resolver can query for and
-	  receive a DS record from a signed zone.</t>
+	    receive a DS record from a signed zone.</t>
+	  <t>Pre-requiste: "Supports DO bit."</t>
 	  <t>Test: Send a request to the resolver under test for an DS
-	  record which is known to exist in a signed zone, such as
-	  dnssec-tools.org/DS.</t>
+	    record which is known to exist in a signed zone, such as
+	    dnssec-tools.org/DS.</t>
 	  <t>SUCCESS: A DNS response was received that contains a
-	   DS record in the answer section.</t>
+	    DS record in the answer section.</t>
+          <t> Note: Some DNSKEY RRsets are large and if the network
+            path has problems with large answers this query may result
+            in either false positive or false negative. In general the
+            DNSKEY queried for should be a small enough to fit into 1220
+            byte answer, to avoid false negative result when TCP is
+	    disabled. </t> 
 	</section>
-	<section title="Supports queries returning DNAME records">
+
+	<section title="Supports negative answers  NSEC records">
+	  <t>Purpose: This tests whether a resolver properly returns
+	    NSEC records for a non-existing domain in a DNSSEC signed zone.</t>
+	  <t>Pre-requiste: "Supports DO bit."</t>
+	  <t>Test: Send a request to the resolver under test for an A
+	    record which is known to not existing, such as
+	    bogusdnstest.dnssec-tools.org.</t>
+	  <t>SUCCESS: A DNS response was received that contains an
+	    NSEC record.</t>
+         <t>Note: The query issued in this test MUST be sent to a
+           NSEC signed zone. Getting back appropriate NSEC3 records
+           does not indicate a failure, but bad test.</t> 
+	</section>
+
+	<section title="Supports negative answers  NSEC3 records">
+	  <t>Purpose: This tests whether a resolver properly returns
+	  NSEC3 records (<xref target="RFC5155" />) for a non-existing
+	  domain in a DNSSEC signed zone.</t>
+	  <t>Pre-requiste: "Supports DO bit."</t>
+	  <t>Test: Send a request to the resolver under test for an A
+	  record which is known to not existing, such as
+	  foobardedabadoo.org.</t>
+	  <t>SUCCESS: A DNS response was received that contains an
+	  NSEC3 record.</t>
+         <t>Note: The query issued in this test MUST be sent to a
+           NSEC3 signed zone. Getting back appropriate NSEC records
+           does not indicate a failure, but bad test.</t> 
+	</section>
+
+	<section title="Supports queries where DNAME records lead to answer">
 	  <t>Purpose: This tests whether a resolver can query for an A
 	  record in a zone with a known DNAME referral for the record's
 	  parent.</t>
@@ -227,13 +289,18 @@
 	   DNAME in the answer section.  An RRSIG must also be
 	  received in the answer section that covers the DNAME record.</t>
 	</section>
+	<section title="UDP size limits"> 
+	  <t> TBD </t> 
+	</section> 
       </section>
+
       <section title="Direct Network Queries">
 	<t>If need be, a validating stub resolver may need to make
-	direct queries to authoritative servers in order to collect
+	direct queries to authoritative servers or known Open
+	Recursive resolver in order to collect
 	the data they require.  To do that, a number of key network
 	features must be functional.</t>
-	<section title="Outbound UDP Support Over Port 53">
+	<section title="Remote UDP Support Over Port 53">
 	  <t>Purpose: This tests basic UDP functionality to outside
 	  the local network.</t>
 	  <t>Test: A DNS
@@ -248,8 +315,20 @@
 	  authoritative for the given zone.  The recursive bit MAY be
 	  set for this request, but does not need to be.</t>
 	</section>
-	<section title="Inbound UDP Support With Fragmentation">
+	<section title="Remote UDP Support With Fragmentation">
+	  <t> Purpose: This tests if the local network can
+	    recieve fragmented UDP answers</t> 
+	  <t>Pre-requisite: Local UDP > 1500 is possible</t> 
+          <t> Test: A DNS request should be sent over UDP to a known
+            distant DNS address asking for a record that has answer larger than
+            2000 bytes. Example send a query for the www.shinkuro.net/A
+            record. </t>
+          <t> Success: A DNS response was received that contains the
+            large answer. </t> 
+          <t> Note: A failure in getting large answers over UDP is not
+            a serious problem unless TCP is not working.</t> 
 	</section>
+
 	<section title="Outbound TCP Support Over Port 53">
 	  <t>Purpose: This tests basic TCP functionality to outside
 	  the local network.</t>
@@ -273,6 +352,9 @@
       tests in an "aggregated" form.  This section defines some labels
       to assign to a resolver under test given the results of the
       tests run against them.</t>
+      <section title="Resolver capability description"> 
+	<t> This section will group and label certain common results TBD</t>
+      </section>
     </section>
 
     <section title="Roadblock Avoidance" anchor="solutions">
@@ -364,13 +446,11 @@
     </section>
     
     <section title="Acknowledgments">
-      <t>Many of the tests in this document were designed during many
-      discussions with Ólafur Guðmundsson, without whom these tests
-      would be significantly less complete.</t>
 
       <t>Multiple lessons learned from multiple implementations led to
       the development of this document, including (in alphabetical
-      order) DNSSEC-Tools, dnssec-trigger, ...
+      order) DNSSEC-Tools, DNSSEC_Resolver_Check, dnssec-trigger, 
+      FCC_Grade.
       </t>
       
       <t>The following people contributed to portions of this document
