@@ -432,6 +432,46 @@
 
     </section>
 
+    <section title="Start-Up and Network Connectivity Issues">
+      <t>A number of scenarios will produce either short-term or
+      long-term connectivity issues with respect to DNSSEC
+      validation.  Consider the following cases:
+      <list>
+	<t>Time Synchronization: A device which has been off for a
+	period of time and the clock is no longer in close
+	synchronization with "real time".  This will cause problems
+	when the device needs to resolve their source of time
+	synchronization, such as "ntp.example.com".</t>
+	<t>Changing Network Properties: A newly established network
+	connection may change state shortly after a HTTP pay-wall
+	authentication system has been used.  This especially common
+	today in hotel networks, where validation, DNSSEC and even DNS
+	are not functional until the user proceeds through a series of
+	web pages to enable the network.  The tests in Section <xref
+	target="tests" /> will produce very different results before and
+	after the network authorization has succeeded.  APIs exist on
+	many operating systems to detect initial network device status
+	changes, such as right after DHCP has finished, but few
+	(none?) exist to detect that a pay-wall has been authenticated
+	through.</t>
+      </list>
+      </t>
+      <t>There are only two choices when situations like this happen:
+      <list>
+	<t>Continue to perform DNSSEC processing, which will likely
+	result in all DNS requests failing.  This is the most secure
+	route, but causes the most operational grief for users.
+	</t>
+	<t>Turn of DNSSEC support until the network proves to be
+	usable.  This allows the user to continue using the network,
+	at the sacrifice of security.  It also allows for a denial of
+	security-service attack if a man-in-the-middle can convince a
+	device that DNSSEC is impossible.</t>
+      </list>
+      </t>
+      <t>What to do: TBD</t>
+    </section>
+
     <section title="IANA Considerations">
       <t>No IANA actions are require to support this document</t>
     </section>
