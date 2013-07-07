@@ -489,7 +489,7 @@
 
       <t>Multiple lessons learned from multiple implementations led to
       the development of this document, including (in alphabetical
-      order) DNSSEC-Tools, DNSSEC_Resolver_Check, dnssec-trigger, 
+      order) DNSSEC-Tools' DNSSEC-Check, DNSSEC_Resolver_Check, dnssec-trigger, 
       FCC_Grade.
       </t>
       
