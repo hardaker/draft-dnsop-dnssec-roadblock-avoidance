@@ -11,7 +11,7 @@
 <?rfc symrefs="yes" ?>
 <?rfc compact="yes" ?>
 <?rfc subcompact="no" ?>
-<rfc category="bcp" ipr="trust200902" docName="draft-hardaker-dnsop-dnssec-roadblock-avoidance-FILLVERSION.txt">
+<rfc category="bcp" ipr="trust200902" docName="draft-hardaker-dnsop-dnssec-roadblock-avoidance-00.txt">
   <front>
     <title abbrev="DNSSEC Roadblock Avoidance">
       DNSSEC Roadblock Avoidance
@@ -43,7 +43,7 @@
         <email>ogud@ogud.com</email>
       </address>
     </author>
-    <date day="4" month="July" year="2013"/>
+    <date day="9" month="July" year="2013"/>
     <area> OPS </area>
     <workgroup>DNSOP </workgroup> 
     <keyword>DNSSEC, Network Problems, DNS </keyword> 
@@ -66,13 +66,6 @@
         non-compliant infrastructure.  It poses potential detection and
         mitigation techniques.
       </t>
-      <t>
-	The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT",
-	"SHOULD", "SHOULD NOT", "RECOMMENDED", "MAY", and "OPTIONAL" in this
-	document are to be interpreted as described in
-	<xref target="RFC2119" />.
-      </t>
-    </section>
     <section title="Background">
       <t>Deployment of DNSSEC today is hampered by network
       components that make it difficult or sometimes impossible for
@@ -89,8 +82,8 @@
           <t> etc. </t>
         </list> 
       </t>
-      <t>This document talks about ways of detecting the state of the
-      network a Host Validator might be attached to, and
+      <t>This document talks about ways a Host Validator can detecting the 
+      state of the network it is attached to, and
       ways to hopefully circumvent the problems associated with the
       network defects it discovers. The tests described here should
       be performed on any resolver that is to have validation turned
@@ -100,13 +93,20 @@
     <section title="Notation"> 
       <t> When we talk about Host Validator this can
 	either be a library that an application has linked in or an
-	actual resovler running on the same machine. </t> 
+	actual resolver running on the same machine. </t> 
       <t> A variant of this is a Validating Forwarding Resolver,
-	this is a resovler that is configured to use upstream
-	Resolvers if possible. Validatign Forward Resolver needs to
+	this is a resolver that is configured to use upstream
+	Resolvers if possible. Validating Forward Resolver needs to
 	perform the same set of tests before using an upstream
-	recursvive resolver. </t> 
+	recursive resolver. </t> 
+      <t>
+	The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT",
+	"SHOULD", "SHOULD NOT", "RECOMMENDED", "MAY", and "OPTIONAL" in this
+	document are to be interpreted as described in
+	<xref target="RFC2119" />.
+      </t>
     </section> 
+    </section>
 
     <section title="Goals">
       <t>The result of this work is intended to show how a Host Validator
@@ -132,7 +132,7 @@
     <section title="Detecting DNSSEC Non-Compilance" anchor="tests">
       <t>A Host Validator must fist determine what
       bottlenecks exist that may hamper its ability to perform DNSSEC
-      lookups.  This section outlines tests that can be done to test
+      look-ups.  This section outlines tests that can be done to test
       certain features of the surrounding network.</t>
       <section title="Determining DNSSEC support in neighboring recursive resolvers">
 	<t>Ideally, a Host Validator can make use of the
@@ -173,7 +173,7 @@
 	  <t> Pre-requisite: "Supports UDP or TCP".</t>
 	  <t>Test: Send a request to the resolver under test for an
 	  A record for a known existing domain, such as
-	  www.dnssec-tools.org, with ENDS0 OPT record in the additional section..</t>
+	  www.dnssec-tools.org, with EDNS0 OPT record in the additional section..</t>
 
 	  <t>SUCCESS: A DNS response was received that contains at
 	  an EDNS0 option with version number 0.</t>
@@ -182,7 +182,7 @@
 	<section title="Supports the DO bit">
 	  <t>Purpose: This tests weather has minimal support of the DO bit.
 	  </t>
-	  <t> Pre-requisite: "Supports ENDS0".</t>
+	  <t> Pre-requisite: "Supports EDNS0".</t>
 	  <t>Test: send a request to the resolver under test for an A record
 	  for a known existing domain such as www.dnssec-tools.org.
 	  Set the DO bit in the outgoing query.</t>
@@ -226,7 +226,7 @@
 	<section title="Supports querying for DNSKEY records">
 	  <t>Purpose: This tests whether a resolver can query for and
 	  receive a DNSKEY record from a signed zone.</t>
-	  <t>Pre-requiste: "Supports DO bit."</t>
+	  <t>Pre-requisite: "Supports DO bit."</t>
 	  <t>Test: Send a request to the resolver under test for an DNSKEY
 	  record which is known to exist in a signed zone, such as
 	  dnssec-tools.org/DNSKEY.</t>
@@ -236,13 +236,13 @@
 	<section title="Supports querying for DS records">
 	  <t>Purpose: This tests whether a resolver can query for and
 	    receive a DS record from a signed zone.</t>
-	  <t>Pre-requiste: "Supports DO bit."</t>
+	  <t>Pre-requisite: "Supports DO bit."</t>
 	  <t>Test: Send a request to the resolver under test for an DS
 	    record which is known to exist in a signed zone, such as
 	    dnssec-tools.org/DS.</t>
 	  <t>SUCCESS: A DNS response was received that contains a
 	    DS record in the answer section.</t>
-          <t> Note: Some DNSKEY RRsets are large and if the network
+          <t> Note: Some DNSKEY RRset's are large and if the network
             path has problems with large answers this query may result
             in either false positive or false negative. In general the
             DNSKEY queried for should be a small enough to fit into 1220
@@ -253,7 +253,7 @@
 	<section title="Supports negative answers  NSEC records">
 	  <t>Purpose: This tests whether a resolver properly returns
 	    NSEC records for a non-existing domain in a DNSSEC signed zone.</t>
-	  <t>Pre-requiste: "Supports DO bit."</t>
+	  <t>Pre-requisite: "Supports DO bit."</t>
 	  <t>Test: Send a request to the resolver under test for an A
 	    record which is known to not existing, such as
 	    bogusdnstest.dnssec-tools.org.</t>
@@ -268,7 +268,7 @@
 	  <t>Purpose: This tests whether a resolver properly returns
 	  NSEC3 records (<xref target="RFC5155" />) for a non-existing
 	  domain in a DNSSEC signed zone.</t>
-	  <t>Pre-requiste: "Supports DO bit."</t>
+	  <t>Pre-requisite: "Supports DO bit."</t>
 	  <t>Test: Send a request to the resolver under test for an A
 	  record which is known to not existing, such as
 	  foobardedabadoo.org.</t>
@@ -292,7 +292,7 @@
 	  received in the answer section that covers the DNAME record.</t>
 	</section>
 	<section title="Permissive DNSSEC"> 
-	  <t> Pre-requiste:  Has returned an answer with AD bit set
+	  <t> Pre-requisite:  Has returned an answer with AD bit set
 	  on queries with DO bit set.</t> 
 	  <t> Purpose: To see if Validating resolver is ignoring
 	  DNSSEC validation failures. </t>
@@ -306,7 +306,7 @@
 	<section title="Supports Unknown RRtypes">
 	  <t> Purpose:Some DNS Resolvers/gateways only support some RRtypes, in
 	  this case recently defined types have problem getting
-	  throgh. </t>
+	  through. </t>
 	  <t> Test: Send a request for recently defined type or
 	  unknown type in the 20000-22000 range, that resolves to a
 	  server that will return answer for all types, such as
@@ -340,7 +340,7 @@
 	</section>
 	<section title="Remote UDP Support With Fragmentation">
 	  <t> Purpose: This tests if the local network can
-	    recieve fragmented UDP answers</t> 
+	    receive fragmented UDP answers</t> 
 	  <t>Pre-requisite: Local UDP > 1500 is possible</t> 
           <t> Test: A DNS request should be sent over UDP to a known
             distant DNS address asking for a record that has answer larger than
@@ -378,7 +378,7 @@
       <section title="Resolver capability description"> 
 	<t> This section will group and label certain common results
 	TBD</t>
-	<t> Resolvers are classifed into following broad 
+	<t> Resolvers are classified into following broad 
 	behaviors: <list style="hanging"> 
 	    <t hangText="Validator"> The resolver passes all DNSSEC
 	    tests and had the AD bit on all. </t> 
@@ -394,14 +394,14 @@
 	  </t> 
 	<t> While it would be great if all resolvers fell cleanly into
 	one of the broad categories above, that is not the case. For
-	that reason it is necesary to augment the classification with
-	more desriptive result, this is done by adding the word
-	"Partial" in front of Validator/DNSSEC Aware classificaitons,
-	followed by subdescriptors of what is not
+	that reason it is necessary to augment the classification with
+	more descriptive result, this is done by adding the word
+	"Partial" in front of Validator/DNSSEC Aware classifications,
+	followed by sub-descriptors of what is not
 	working. <list style="hanging"> 
-	    <t hangText="Unknown"> Failed Unkown test</t> 
+	    <t hangText="Unknown"> Failed Unknown test</t> 
 	    <t hangText="DNAME"> Failed DNAME test</t> 
-	    <t hangText="NSEC3"> Failed Unkown test</t> 
+	    <t hangText="NSEC3"> Failed NSEC3 test</t> 
 	    <t hangText="TCP"> TCP not available </t> 
 	    <t hangText="SlowBig"> UDP is size limited but TCP
 	    fallback works</t> 
@@ -429,7 +429,7 @@
             authentication chain. This could result if referral loops
             are encountered, any of the antecedent zone delegations are lame, 
             aliases are erroneously followed for certain RRtypes (such as SOA,
-            DNSKEYs or DS records), or if resource records for certiain
+            DNSKEYs or DS records), or if resource records for certain
             types (e.g. DS) are not returned from the zone that is authoritative
             for them.</t> 
           <t>Bogus Response, when the cryptographic assertions in the
@@ -451,7 +451,7 @@
       a duration of that zone's SOA negative TTL. </t>
 
       <t> The validator may place name servers that exhibit broken 
-      behavior into a blacklist, and bypass these nameservers
+      behavior into a blacklist, and bypass these name servers
       independently of the zone-specific fallback cache. 
       The validator must time out entries in this name server blacklist
       periodically, where this interval could be set to be the same as
@@ -493,7 +493,7 @@
       <list>
 	<t>Time Synchronization: A device which has been off for a
 	period of time and the clock is no longer in close
-	synchronization with "real time".  This will cause problems
+	synchronization with "real time" or a device that allways during boot has clock set to the same time.  This will cause problems
 	when the device needs to resolve their source of time
 	synchronization, such as "ntp.example.com".</t>
 	<t>Changing Network Properties: A newly established network
@@ -532,8 +532,8 @@
 
     <section title="Security Considerations">
       <t>This document discusses problems that may occur while
-      deploying the secure DNSSEC protocol and what mitigations can be
-      used to help detect and midigate these problems.  Following
+      deploying the secure DNSSEC protocol and what mitigation's can be
+      used to help detect and mitigate these problems.  Following
       these suggestions should result in a more secure DNSSEC
       operational environment than if DNSSEC was simply disabled when
       it fails to perform as expected.</t>
