@@ -76,12 +76,12 @@
     <section title="Background">
       <t>Deployment of DNSSEC today is hampered by network
       components that make it difficult or sometimes impossible for
-      validating stub resolvers to effectively obtain the DNSSEC data
+      validating resolvers to effectively obtain the DNSSEC data
       they need.  This can occur for many different reasons including 
 	<list style="symbols"> 
           <t> because neighboring recursive resolvers are not fully
 	    DNSSEC compliant </t> 
-          <t>because "middle-boxes" active block outbound traffic to
+          <t>because "middle-boxes" active block/restrict outbound traffic to
             the DNS port (53) either UDP and/or TCP .</t>
           <t> Network component in path does not allow UDP
 	    fragments</t> 
@@ -90,31 +90,33 @@
         </list> 
       </t>
       <t>This document talks about ways of detecting the state of the
-      network a validating stub resolver might be attached to, and
+      network a Host Validator might be attached to, and
       ways to hopefully circumvent the problems associated with the
-      network defects it discovers.</t>
+      network defects it discovers. The tests described here should
+      be performed on any resolver that is to have validation turned
+      to prevent problems.</t>
     </section>
 
     <section title="Notation"> 
-      <t> When we talk about Validating Stub Resovler this can
+      <t> When we talk about Host Validator this can
 	either be a library that an application has linked in or an
 	actual resovler running on the same machine. </t> 
       <t> A variant of this is a Validating Forwarding Resolver,
 	this is a resovler that is configured to use upstream
-	Resolvers if possible. </t> 
-      <t> ???? should we use the words Host Validator to cover all of
-	these ? </t> 
+	Resolvers if possible. Validatign Forward Resolver needs to
+	perform the same set of tests before using an upstream
+	recursvive resolver. </t> 
     </section> 
 
     <section title="Goals">
-      <t>The result of this work is intended to show how a validating
-      stub resolver can detect the capabilities of a nearby recursive resolver
-      whenever possible.  This enables the validating stub resolver to
+      <t>The result of this work is intended to show how a Host Validator
+      can detect the capabilities of a nearby recursive resolver
+      whenever possible.  This enables the Host Validator to
       make use of the caching functionality in the recursive resolver,
       which decreases network traffic and increases response
       times.</t>
 
-      <t>A validating stub resolver has two choices: it can wait to
+      <t>A Host Validator has two choices: it can wait to
       determine that it has problems with a recursive resolver based
       on the results that it is getting from legitimate queries issued
       to it, or it can proactively test for problems (Section <xref
@@ -128,12 +130,12 @@
     </section>
 
     <section title="Detecting DNSSEC Non-Compilance" anchor="tests">
-      <t>A validating stub resolver must fist determine what
+      <t>A Host Validator must fist determine what
       bottlenecks exist that may hamper its ability to perform DNSSEC
       lookups.  This section outlines tests that can be done to test
       certain features of the surrounding network.</t>
       <section title="Determining DNSSEC support in neighboring recursive resolvers">
-	<t>Ideally, a validating stub resolver can make use of the
+	<t>Ideally, a Host Validator can make use of the
 	caching present in neighboring recursive resolvers.  This
 	section discusses the tests that such a recursive resolver
 	must pass in order to be fully usable as a near-by DNS
@@ -289,13 +291,34 @@
 	   DNAME in the answer section.  An RRSIG must also be
 	  received in the answer section that covers the DNAME record.</t>
 	</section>
+	<section title="Permissive DNSSEC"> 
+	  <t> Pre-requiste:  Has returned an answer with AD bit set
+	  on queries with DO bit set.</t> 
+	  <t> Purpose: To see if Validating resolver is ignoring
+	  DNSSEC validation failures. </t>
+	  <t> Test: ask for data from a broken DNSSEC delegation such
+	  as dnssec-fail.org. </t>
+	  <t> SUCCESS: reply with Rcode == SERVFAIL</t> 
+	</section>
 	<section title="UDP size limits"> 
 	  <t> TBD </t> 
 	</section> 
+	<section title="Supports Unknown RRtypes">
+	  <t> Purpose:Some DNS Resolvers/gateways only support some RRtypes, in
+	  this case recently defined types have problem getting
+	  throgh. </t>
+	  <t> Test: Send a request for recently defined type or
+	  unknown type in the 20000-22000 range, that resolves to a
+	  server that will return answer for all types, such as
+	  alltypes.res.dnssecready.org</t> 
+	  <t>SUCCESS: A DNS response was retrieved that contains the
+	  type requested in the answer section.</t>
+	</section> 
+
       </section>
 
       <section title="Direct Network Queries">
-	<t>If need be, a validating stub resolver may need to make
+	<t>If need be, a Host Validator may need to make
 	direct queries to authoritative servers or known Open
 	Recursive resolver in order to collect
 	the data they require.  To do that, a number of key network
@@ -351,9 +374,40 @@
       <t>Some conclusions can be drawn from the results of the above
       tests in an "aggregated" form.  This section defines some labels
       to assign to a resolver under test given the results of the
-      tests run against them.</t>
+      tests run against them. </t>
       <section title="Resolver capability description"> 
-	<t> This section will group and label certain common results TBD</t>
+	<t> This section will group and label certain common results
+	TBD</t>
+	<t> Resolvers are classifed into following broad 
+	behaviors: <list style="hanging"> 
+	    <t hangText="Validator"> The resolver passes all DNSSEC
+	    tests and had the AD bit on all. </t> 
+	    <t hangText="DNSSEC Aware"> The resolver passes all
+	    DNSSEC tests but does not set AD bit on answers,
+	    indicating it is not validating, a Host Validator will
+	    function fine using this resolver as a forwarder.</t> 
+	    <t hangText="Non-DNSSEC capable"> The resolver is not
+	    DNSSEC aware and will make it hard for a Host Validator to
+	    operate behind it. </t>
+	    <t hangText="Not a DNS Resolver"> Bad address do not use.</t> 
+	    </list> 
+	  </t> 
+	<t> While it would be great if all resolvers fell cleanly into
+	one of the broad categories above, that is not the case. For
+	that reason it is necesary to augment the classification with
+	more desriptive result, this is done by adding the word
+	"Partial" in front of Validator/DNSSEC Aware classificaitons,
+	followed by subdescriptors of what is not
+	working. <list style="hanging"> 
+	    <t hangText="Unknown"> Failed Unkown test</t> 
+	    <t hangText="DNAME"> Failed DNAME test</t> 
+	    <t hangText="NSEC3"> Failed Unkown test</t> 
+	    <t hangText="TCP"> TCP not available </t> 
+	    <t hangText="SlowBig"> UDP is size limited but TCP
+	    fallback works</t> 
+	    <t hangText="NoBig"> TCP not available and UDP is size limited</t> 
+	    <t hangText="Permissive"> Passes data known to fail validation</t> 
+	</list> </t>
       </section>
     </section>
 
