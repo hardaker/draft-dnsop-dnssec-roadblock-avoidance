@@ -180,7 +180,7 @@
 	</section>
 
 	<section title="Supports the DO bit">
-	  <t>Purpose: This tests weather has minimal support of the DO bit.
+	  <t>Purpose: This tests whether a resolver has minimal support of the DO bit.
 	  </t>
 	  <t> Pre-requisite: "Supports EDNS0".</t>
 	  <t>Test: send a request to the resolver under test for an A record
@@ -196,7 +196,7 @@
 	</section>
 
 	<section title="Supports the AD bit">
-	  <t>Purpose: This weather the resolver is a validating
+	  <t>Purpose: This tests whether the resolver is a validating
 	  resolver.</t>
 	  <t>Pre-requisite: "Supports EDNS0".</t>
 	  <t>Test: Send a request to the resolver under test for an A
