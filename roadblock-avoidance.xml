@@ -162,7 +162,7 @@
 	  request should be sent over TCP to the resolver under test for an A
 	  record for a known existing domain, such as
 	  www.dnssec-tools.org.</t>
-	  <t>SUCCESS: A DNS response was received that contains an a A
+	  <t>SUCCESS: A DNS response was received that contains an A
 	  record in the answer section.  (The data itself does not need
 	  to be checked.)</t>
 	</section>
@@ -232,6 +232,12 @@
 	  dnssec-tools.org/DNSKEY.</t>
 	  <t>SUCCESS: A DNS response was received that contains a
 	   DNSKEY record in the answer section.</t>
+          <t> Note: Some DNSKEY RRset's are large and if the network
+            path has problems with large answers this query may result
+            in either false positive or false negative. In general the
+            DNSKEY queried for should be a small enough to fit into 1220
+            byte answer, to avoid false negative result when TCP is
+	    disabled. </t> 
 	</section>
 	<section title="Supports querying for DS records">
 	  <t>Purpose: This tests whether a resolver can query for and
@@ -242,12 +248,6 @@
 	    dnssec-tools.org/DS.</t>
 	  <t>SUCCESS: A DNS response was received that contains a
 	    DS record in the answer section.</t>
-          <t> Note: Some DNSKEY RRset's are large and if the network
-            path has problems with large answers this query may result
-            in either false positive or false negative. In general the
-            DNSKEY queried for should be a small enough to fit into 1220
-            byte answer, to avoid false negative result when TCP is
-	    disabled. </t> 
 	</section>
 
 	<section title="Supports negative answers  NSEC records">
@@ -256,7 +256,7 @@
 	  <t>Pre-requisite: "Supports DO bit."</t>
 	  <t>Test: Send a request to the resolver under test for an A
 	    record which is known to not existing, such as
-	    bogusdnstest.dnssec-tools.org.</t>
+	    non-existent.dnssec-tools.org.</t>
 	  <t>SUCCESS: A DNS response was received that contains an
 	    NSEC record.</t>
          <t>Note: The query issued in this test MUST be sent to a
@@ -271,7 +271,7 @@
 	  <t>Pre-requisite: "Supports DO bit."</t>
 	  <t>Test: Send a request to the resolver under test for an A
 	  record which is known to not existing, such as
-	  foobardedabadoo.org.</t>
+	  non-existent.nsec3-ns.test.dnssec-tools.org.</t>
 	  <t>SUCCESS: A DNS response was received that contains an
 	  NSEC3 record.</t>
          <t>Note: The query issued in this test MUST be sent to a
@@ -418,7 +418,44 @@
       discusses some of the options available given the results from
       the previous sections.</t>
 
-      <t>For a stub resolver, problems with the recursive name server
+      <t> The general fallback approach can be described by the
+      following sequence:</t>
+
+      <figure> <artwork>
+For each resolver that is configured on the host
+
+    If the resolver is labeled as "Validator" or "DNSSEC aware"
+
+        Send query through this resolver and perform local
+        validation on the results.
+
+        If validation fails, try the next resolver
+
+    If the resolver is labeled "Not a DNS Resolver" or
+       "Non-DNSSEC capable"
+
+        Mark it as unusable and try next resolver
+                      
+    If direct queries are supported try iterating from Root
+
+    Else return some useful failure condition
+
+      </artwork></figure>
+
+      <t> While attempting query resolution through a particular
+      recursive name server the particular transport that worked along
+      with any transport-specific parameters must be remembered in order
+      to prevent unnecessary fallbacks. </t>
+
+      <t> Transport-specific parameters must also be remembered for each
+      authoritative name server that is queried while fallowing the
+      iterative mode lookup operation as a fallback strategy. </t>
+
+      <t> Any transport settings that are remembered for a particular
+      name server must be periodically refreshed; it should also be forgotten
+      when an error is encountered as described below. </t> 
+
+      <t>For a stub resolver, problems with the name server
         may manifest themselves as the following types of error
         conditions:</t>
 
@@ -437,9 +474,32 @@
       </list> </t>
     
       <t> For each of the above error conditions a validator may adopt
-      the following fallback techniques, preferring a particular approach if
+      the following dynamic fallback techniques, preferring a particular approach if
       it is known to work for a given name server or zone from previous
       attempts or an initial probe sequence. </t> 
+
+      <t><list style="hanging">
+        <t>No response, error response, or missing DNSSEC meta-data
+        <list style="symbols">
+            <t> EDNS0 fallback [4096, 1492, None] </t>
+            <t> TCP only </t>
+            <t> Iterative query to root if not already iterating </t>
+            <t> alternative transport (to recursive name server), if
+                supported </t>
+        </list> </t>
+
+        <t>Illegal Response
+        <list style="symbols">
+            <t> Iterative query to root if operating as a stub </t>
+            <t> check for provably insecure status from closest trust
+                anchor anchor and with EDNS0 fallback. </t>
+        </list> </t>
+
+        <t>Bogus Response
+        <list style="symbols">
+            <t> Iterative query to root if operating as a stub </t>
+        </list> </t>
+      </list></t>
 
       <t> For each fallback technique, attempts to multiple potential
       name servers should be skewed such that the next name server is
@@ -452,37 +512,10 @@
 
       <t> The validator may place name servers that exhibit broken 
       behavior into a blacklist, and bypass these name servers
-      independently of the zone-specific fallback cache. 
+      for all zones that they are authoritative for. 
       The validator must time out entries in this name server blacklist
       periodically, where this interval could be set to be the same as
       the DNSSEC BAD cache default TTL.</t>   
-
-      <section title="No response/error response" anchor="noresp">        
-          <t> <list style="symbols">
-            <t> EDNS0 fallback [4096, 1492, None] </t>
-            <t> TCP only </t>
-            <t> alternative transport (to recursive name server) </t>
-            <t> Iterative query to root if operating as a stub </t>
-            <t> query alternative authoritative name server if operating in iterative mode </t>
-          </list> </t>
-      </section>
-
-      <section title="Illegal Response Fallback">        
-          <t> <list style="symbols">
-            <t> Iterative query to root if operating as a stub </t>
-            <t> query alternative authoritative name server if operating in iterative mode </t>
-            <t> check for provably insecure status from closest trust anchor </t>
-          </list> </t>
-      </section>
-
-      <section title="Bogus Response Fallback"> 
-          <t> <list style="symbols">
-            <t> If DNSSEC-meta data is missing follow <xref target="noresp"/> </t>
-            <t> Iterative query to root if operating as a stub </t>
-            <t> query alternative authoritative name server if operating in
-                iterative mode </t>
-          </list> </t>
-      </section>
 
     </section>
 
