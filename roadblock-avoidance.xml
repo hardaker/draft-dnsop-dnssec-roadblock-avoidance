@@ -585,6 +585,28 @@
       </list>
       </t>
       <t>What to do: TBD</t>
+      <section title="Partial Resolver Usage">
+	<t>It may be possible to use Non-DNSSEC Capable
+	caching resolvers in careful ways if maximum optimization is
+	desired.  This section describes some of the advanced
+	techniques that could be used to use a resolver in at least a
+	minimal way.  Most of the time this would be unnecessary,
+	except in the case where none of the resolvers are fully
+	compliant and thus the choices would be to use them at least
+	minimally or not at all (and no caching benefits would be
+	available).</t>
+
+	<section title="Known Insecure Lookups">
+	  <t>If a resolver is Non-DNSSEC Capable but a section of the
+	  DNS tree has been determined to be Provably Insecure <xref
+	  target="RFC4035" />, then queries to this section of the
+	  tree MAY be sent through Non-DNSSEC Capable caching resolver.</t>
+
+	<section title="Partial NSEC/NSEC3 Support">
+	  <t>TBD</t>
+	</section>
+
+
     </section>
 
     <section title="IANA Considerations">
