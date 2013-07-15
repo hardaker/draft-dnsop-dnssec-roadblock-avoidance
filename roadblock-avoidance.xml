@@ -443,7 +443,6 @@
       following sequence:</t>
 
       <figure> <artwork>
-For each resolver that is configured on the host
 
     If the resolver is labeled as "Validator" or "DNSSEC aware"
 
@@ -452,73 +451,81 @@ For each resolver that is configured on the host
 
         If validation fails, try the next resolver
 
-    If the resolver is labeled "Not a DNS Resolver" or
+    Else if the resolver is labeled "Not a DNS Resolver" or
        "Non-DNSSEC capable"
 
         Mark it as unusable and try next resolver
                       
-    If direct queries are supported try iterating from Root
+    Else if no more resolvers are configured and if direct queries 
+    are supported try iterating from Root
 
-    Else return some useful failure condition
+    Else return a useful error code
 
       </artwork></figure>
 
       <t> While attempting query resolution through a particular
-      recursive name server the particular transport that worked along
+      recursive name server the particular transport method that worked, along
       with any transport-specific parameters must be remembered in order
-      to prevent unnecessary fallbacks. </t>
+      to short-circuit any unnecessary fallback attempts. </t>
 
       <t> Transport-specific parameters must also be remembered for each
-      authoritative name server that is queried while fallowing the
-      iterative mode lookup operation as a fallback strategy. </t>
+      authoritative name server that is queried while performing an
+      iterative mode lookup. </t>
 
       <t> Any transport settings that are remembered for a particular
-      name server must be periodically refreshed; it should also be forgotten
-      when an error is encountered as described below. </t> 
+      name server must be periodically refreshed; it should also be
+      refreshed when an error is encountered as described below. </t> 
 
       <t>For a stub resolver, problems with the name server
         may manifest themselves as the following types of error
         conditions:</t>
 
       <t> <list style="symbols">
-          <t>No response/error response.</t>
+          <t>No response/error response or missing DNSSEC meta-data.</t>
           <t>Illegal Response, which prevents the validator from
             fetching all necessary records required for constructing an
-            authentication chain. This could result if referral loops
-            are encountered, any of the antecedent zone delegations are lame, 
-            aliases are erroneously followed for certain RRtypes (such as SOA,
-            DNSKEYs or DS records), or if resource records for certain
-            types (e.g. DS) are not returned from the zone that is authoritative
-            for them.</t> 
+            authentication chain. This could result when referral loops
+            are encountered, when any of the antecedent zone delegations are lame, 
+            when aliases are erroneously followed for certain RRtypes (such as SOA,
+            DNSKEYs or DS records), or when resource records for certain
+            types (e.g. DS) are returned from a zone that is not authoritative
+            for such records.</t> 
           <t>Bogus Response, when the cryptographic assertions in the
-            authentication chain do not validate. </t> 
+            authentication chain do not validate properly. </t> 
       </list> </t>
     
       <t> For each of the above error conditions a validator may adopt
-      the following dynamic fallback techniques, preferring a particular approach if
+      the following dynamic fallback technique, preferring a particular approach if
       it is known to work for a given name server or zone from previous
-      attempts or an initial probe sequence. </t> 
+      attempts. </t> 
 
-      <t><list style="hanging">
+      <t><list style="symbols">
         <t>No response, error response, or missing DNSSEC meta-data
         <list style="symbols">
-            <t> EDNS0 fallback [4096, 1492, None] </t>
-            <t> TCP only </t>
-            <t> Iterative query to root if not already iterating </t>
-            <t> alternative transport (to recursive name server), if
-                supported </t>
+            <t> Re-try with different EDNS0 sizes [4096, 1492, None] </t>
+            <t> Re-try with TCP only </t>
+            <t> Perform an iterative query starting from Root if the
+                previous error was returned from a lookup that had
+                recursion enabled.  </t>
+            <t> Re-try using an alternative transport method, if
+                this alternative method is known (configured) to be
+                supported by the nameserver in question. </t>
         </list> </t>
 
         <t>Illegal Response
         <list style="symbols">
-            <t> Iterative query to root if operating as a stub </t>
-            <t> check for provably insecure status from closest trust
-                anchor anchor and with EDNS0 fallback. </t>
+            <t> Perform an iterative query starting from Root if the
+                previous error was returned from a lookup that had
+                recursion enabled.  </t>
+            <t> Check if any of the antecedent zones up to the closest
+                configured trust anchor are provably insecure. </t>
         </list> </t>
 
         <t>Bogus Response
         <list style="symbols">
-            <t> Iterative query to root if operating as a stub </t>
+            <t> Perform an iterative query starting from Root if the
+                previous error was returned from a lookup that had
+                recursion enabled.  </t>
         </list> </t>
       </list></t>
 
