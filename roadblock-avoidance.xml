@@ -567,10 +567,11 @@
 	  DNS tree has been determined to be Provably Insecure <xref
 	  target="RFC4035" />, then queries to this section of the
 	  tree MAY be sent through Non-DNSSEC Capable caching resolver.</t>
-
+	</section>
 	<section title="Partial NSEC/NSEC3 Support">
 	  <t>TBD</t>
 	</section>
+      </section>
     </section>
 
     <section title="Start-Up and Network Connectivity Issues">
@@ -612,7 +613,9 @@
 	device that DNSSEC is impossible.</t>
       </list>
       </t>
-      <t>What to do: TBD</t>
+      <section title="What To Do">
+	<t>TBD</t>
+      </section>
     </section>
 
     <section title="IANA Considerations">
