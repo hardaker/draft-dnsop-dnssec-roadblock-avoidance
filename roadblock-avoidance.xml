@@ -463,17 +463,17 @@
 
       </artwork></figure>
 
-      <t> While attempting query resolution through a particular
-      recursive name server the particular transport method that worked, along
-      with any transport-specific parameters must be remembered in order
-      to short-circuit any unnecessary fallback attempts. </t>
+      <t> While attempting resolution through a particular recursive
+      name server with a particular transport method that worked, any
+      transport-specific parameters must be remembered in order to
+      short-circuit any unnecessary fallback attempts. </t>
 
       <t> Transport-specific parameters must also be remembered for each
       authoritative name server that is queried while performing an
       iterative mode lookup. </t>
 
       <t> Any transport settings that are remembered for a particular
-      name server must be periodically refreshed; it should also be
+      name server must be periodically refreshed; they should also be
       refreshed when an error is encountered as described below. </t> 
 
       <t>For a stub resolver, problems with the name server
