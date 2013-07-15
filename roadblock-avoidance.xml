@@ -508,7 +508,7 @@
       <t><list style="symbols">
         <t>No response, error response, or missing DNSSEC meta-data
         <list style="symbols">
-            <t> Re-try with different EDNS0 sizes [4096, 1492, None] </t>
+            <t> Re-try with different EDNS0 sizes (4096, 1492, None) </t>
             <t> Re-try with TCP only </t>
             <t> Perform an iterative query starting from Root if the
                 previous error was returned from a lookup that had
