@@ -433,6 +433,12 @@
     </section>
 
     <section title="Roadblock Avoidance" anchor="solutions">
+      <t>[Editors note: the goal of this document is to tie the above
+      tests and aggregations to avoidance practices; however right now
+      the "tie" part of this text is known to be weak.  The goal of
+      this document is specifically to improve this tie as work on
+      this document progresses]</t> 
+
       <t>Once we have determined what level of support is available in
       the neighboring network, we can determine what must be done in
       order to effectively act as a validating resolver.  This section
