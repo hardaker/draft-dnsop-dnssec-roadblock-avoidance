@@ -11,7 +11,7 @@
 <?rfc symrefs="yes" ?>
 <?rfc compact="yes" ?>
 <?rfc subcompact="no" ?>
-<rfc category="bcp" ipr="trust200902" docName="draft-hardaker-dnsop-dnssec-roadblock-avoidance-01og.txt">
+<rfc category="bcp" ipr="trust200902" docName="draft-hardaker-dnsop-dnssec-roadblock-avoidance-01sk.txt">
   <front>
     <title abbrev="DNSSEC Roadblock Avoidance">
       DNSSEC Roadblock Avoidance
@@ -56,7 +56,7 @@
         <email>suresh@tislabs.com</email>
       </address>
     </author>
-    <date day="9" month="July" year="2013"/>
+    <date day="13" month="January" year="2014"/>
     <area> OPS </area>
     <workgroup>DNSOP </workgroup> 
     <keyword>DNSSEC, Network Problems, DNS </keyword> 
@@ -64,10 +64,10 @@
       <!-- $Revision: 1.28 $ -->
       <t>
         This document describes problems that a DNSSEC aware
-        resolver/application might run into to
-        non-compliant infrastructure.  It poses potential detection and
+        resolver/application might run into within a  
+        non-compliant infrastructure.  It outline potential detection and
         mitigation techniques. The scope of the document is to create
-        a shared approaches to detect and overcome network issues that
+        a shared approache to detect and overcome network issues that
         a DNSSEC software/system may face. 
       </t>
     </abstract>
@@ -122,12 +122,12 @@
 
     <section title="Goals">
       <t>The result of this work is intended to show how a Host Validator
-      can detect the capabilities of a nearby recursive resolver,  and problems 
-      network links that affect DNSSEC resolution.
-      This enables the Host Validator to
+      can detect the capabilities of a nearby recursive resolver, and
+      work around any problems that could potentially affect DNSSEC
+      resolution.  This enables the Host Validator to
       make use of the caching functionality of the recursive resolver,
-      which decreases network traffic and increases response
-      times.</t>
+      which is desirable in that it decreases network traffic and
+      improves response times.</t>
 
       <t>A Host Validator has two choices: it can wait to
       determine that it has problems with a recursive resolver based
@@ -138,7 +138,7 @@
       to both of these paths that are application specific, and this
       document does not attempt to provide guidance about whether
       proactive tests should or should not be used.  Either way,
-      however, DNSSEC roadblock avoidance techniques ought to be used
+      DNSSEC roadblock avoidance techniques ought to be used
       when needed and if possible.</t>
     </section>
 
@@ -197,7 +197,7 @@
 	  www.dnssec-tools.org, with an EDNS0 OPT record in the
 	  additional section.</t>
 
-	  <t>SUCCESS: A DNS response was received that contains at
+	  <t>SUCCESS: A DNS response was received that contains 
 	  an EDNS0 option with version number 0.</t>
 	</section>
 
@@ -260,8 +260,8 @@
             DNSKEY queried for is a small enough to fit into 1220
             byte answer, to avoid false negative result when TCP is
 	    disabled. However, querying many zones will result in
-	    answers greater than 1220 bytes so ideally TCP is available. </t> 
-	</section>
+        answers greater than 1220 bytes so ideally TCP MUST be
+        available. </t> </section>
 
 	<section title="Supports querying for DS records">
 	  <t>Purpose: This tests whether a resolver can query for and
@@ -295,7 +295,7 @@
 	  domain in a DNSSEC signed zone.</t>
 	  <t>Pre-requisite: "Supports the DO bit."</t>
 	  <t>Test: Send a request to the resolver under test for an A
-	  record which is known to not existing, such as
+	  record which is known to be non-existent, such as
 	  non-existent.nsec3-ns.test.dnssec-tools.org.  Set the DO bit in the
 	  outgoing query.</t>
 	  <t>SUCCESS: A DNS response was received that contains an
@@ -543,7 +543,7 @@
       </list></t>
 
       <t> For each fallback technique, attempts to multiple potential
-      name servers is skewed such that the next name server is
+      name servers should be skewed such that the next name server is
       tried when the previous one encounters an error or a timeout is
       reached, whichever is earlier. </t> 
 
