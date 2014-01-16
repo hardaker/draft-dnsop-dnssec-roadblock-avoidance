@@ -11,7 +11,7 @@
 <?rfc symrefs="yes" ?>
 <?rfc compact="yes" ?>
 <?rfc subcompact="no" ?>
-<rfc category="bcp" ipr="trust200902" docName="draft-hardaker-dnsop-dnssec-roadblock-avoidance-01sk.txt">
+<rfc category="bcp" ipr="trust200902" docName="draft-hardaker-dnsop-dnssec-roadblock-avoidance-01.txt">
   <front>
     <title abbrev="DNSSEC Roadblock Avoidance">
       DNSSEC Roadblock Avoidance
@@ -99,7 +99,11 @@
       the state of the network it is attached to, and ways to
       hopefully circumvent the problems associated with the network
       defects it discovers. The tests described in this document may
-      be performed on any validating resolver to detect and prevent problems.</t>
+      be performed on any validating resolver to detect and prevent problems.
+      While these recomendations are mainly aimed at Host Validators it it 
+      prudent to perform these test from regular Validatating Resolvers 
+      before enabling just to make sure things work. 
+      </t>
     </section>
 
     <section title="Notation"> 
