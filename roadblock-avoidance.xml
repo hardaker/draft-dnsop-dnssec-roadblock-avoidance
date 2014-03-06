@@ -11,7 +11,7 @@
 <?rfc symrefs="yes" ?>
 <?rfc compact="yes" ?>
 <?rfc subcompact="no" ?>
-<rfc category="bcp" ipr="trust200902" docName="draft-hardaker-dnsop-dnssec-roadblock-avoidance-00.txt">
+<rfc category="bcp" ipr="trust200902" docName="draft-hardaker-dnsop-dnssec-roadblock-avoidance-01.txt">
   <front>
     <title abbrev="DNSSEC Roadblock Avoidance">
       DNSSEC Roadblock Avoidance
@@ -56,7 +56,7 @@
         <email>suresh@tislabs.com</email>
       </address>
     </author>
-    <date day="9" month="July" year="2013"/>
+    <date day="13" month="January" year="2014"/>
     <area> OPS </area>
     <workgroup>DNSOP </workgroup> 
     <keyword>DNSSEC, Network Problems, DNS </keyword> 
@@ -64,10 +64,10 @@
       <!-- $Revision: 1.28 $ -->
       <t>
         This document describes problems that a DNSSEC aware
-        resolver/application might run into to
-        non-compliant infrastructure.  It poses potential detection and
+        resolver/application might run into within a  
+        non-compliant infrastructure.  It outline potential detection and
         mitigation techniques. The scope of the document is to create
-        a shared approaches to detect and overcome network issues that
+        a shared approache to detect and overcome network issues that
         a DNSSEC software/system may face. 
       </t>
     </abstract>
@@ -99,13 +99,17 @@
       the state of the network it is attached to, and ways to
       hopefully circumvent the problems associated with the network
       defects it discovers. The tests described in this document may
-      be performed on any validating resolver to detect and prevent problems.</t>
+      be performed on any validating resolver to detect and prevent problems.
+      While these recomendations are mainly aimed at Host Validators it it 
+      prudent to perform these test from regular Validatating Resolvers 
+      before enabling just to make sure things work. 
+      </t>
     </section>
 
     <section title="Notation"> 
       <t>When we talk about a "Host Validator", this can
 	either be a library that an application has linked in or an
-	actual resolver running on the same machine.</t> 
+	actual validating resolver running on the same machine.</t> 
       <t> A variant of this is a "Validating Forwarding Resolver",
 	which is a resolver that is configured to use upstream
 	Resolvers if possible. Validating Forward Resolver needs to
@@ -122,11 +126,12 @@
 
     <section title="Goals">
       <t>The result of this work is intended to show how a Host Validator
-      can detect the capabilities of a nearby recursive resolver.
-      This enables the Host Validator to
+      can detect the capabilities of a nearby recursive resolver, and
+      work around any problems that could potentially affect DNSSEC
+      resolution.  This enables the Host Validator to
       make use of the caching functionality of the recursive resolver,
-      which decreases network traffic and increases response
-      times.</t>
+      which is desirable in that it decreases network traffic and
+      improves response times.</t>
 
       <t>A Host Validator has two choices: it can wait to
       determine that it has problems with a recursive resolver based
@@ -137,7 +142,7 @@
       to both of these paths that are application specific, and this
       document does not attempt to provide guidance about whether
       proactive tests should or should not be used.  Either way,
-      however, DNSSEC roadblock avoidance techniques should be used
+      DNSSEC roadblock avoidance techniques ought to be used
       when needed and if possible.</t>
     </section>
 
@@ -146,22 +151,27 @@
       bottlenecks exist that may hamper its ability to perform DNSSEC
       look-ups.  This section outlines tests that can be done to test
       certain features of the surrounding network.</t>
+      <t> NOTE: when performing these tests against an address, we make the 
+      following assumtption about that address: 
+      It is a unicast address or an anycast cluster where all servers have 
+      identical configuration and connectivity. 
+      </t>
       <section title="Determining DNSSEC support in neighboring recursive resolvers">
 	<t>Ideally, a Host Validator can make use of the
 	caching present in neighboring recursive resolvers.  This
 	section discusses the tests that a neighboring recursive resolver
-	must pass in order to be fully usable as a near-by DNS
+	MUST pass in order to be fully usable as a near-by DNS
 	cache.</t>
-	<t>Unless stated otherwise, all of the following tests should
+	<t>Unless stated otherwise, all of the following tests SHOULD
 	have the recursive flag set when sending out a query and
-	should be sent over UDP.  Unless otherwise stated, the tests
-	must not have the DO bit set or utilize any of the other
+	SHOULD be sent over UDP.  Unless otherwise stated, the tests
+	MUST NOT have the DO bit set or utilize any of the other
 	DNSSEC related requirements, like EDNS0.  The tests are
 	designed to check for one feature at a time.</t>
 	<section title="Supports UDP answers">
 	  <t>Purpose: This tests basic DNS over UDP functionality to a resolver.  </t>
 	  <t>Test: A DNS
-	  request should be sent to the resolver under test for an A
+	  request is sent to the resolver under test for an A
 	  record for a known existing domain, such as
 	  www.dnssec-tools.org.</t>
 	  <t>SUCCESS: A DNS response was received that contains an a A
@@ -174,7 +184,7 @@
 	<section title="Supports TCP answers">
 	  <t>Purpose: This tests basic TCP functionality to a resolver.  </t>
 	  <t>Test: A DNS
-	  request should be sent over TCP to the resolver under test for an A
+	  request is sent over TCP to the resolver under test for an A
 	  record for a known existing domain, such as
 	  www.dnssec-tools.org.</t>
 	  <t>SUCCESS: A DNS response was received that contains an A
@@ -191,7 +201,7 @@
 	  www.dnssec-tools.org, with an EDNS0 OPT record in the
 	  additional section.</t>
 
-	  <t>SUCCESS: A DNS response was received that contains at
+	  <t>SUCCESS: A DNS response was received that contains 
 	  an EDNS0 option with version number 0.</t>
 	</section>
 
@@ -251,11 +261,12 @@
           <t> Note: Some DNSKEY RRset's are large and if the network
             path has problems with large answers this query may result
             in either false positive or false negative. In general the
-            DNSKEY queried for should be a small enough to fit into 1220
+            DNSKEY queried for is a small enough to fit into 1220
             byte answer, to avoid false negative result when TCP is
 	    disabled. However, querying many zones will result in
-	    answers greater than 1220 bytes so ideally TCP should be available. </t> 
-	</section>
+        answers greater than 1220 bytes so ideally TCP MUST be
+        available. </t> </section>
+
 	<section title="Supports querying for DS records">
 	  <t>Purpose: This tests whether a resolver can query for and
 	    receive a DS record from a signed zone.</t>
@@ -288,7 +299,7 @@
 	  domain in a DNSSEC signed zone.</t>
 	  <t>Pre-requisite: "Supports the DO bit."</t>
 	  <t>Test: Send a request to the resolver under test for an A
-	  record which is known to not existing, such as
+	  record which is known to be non-existent, such as
 	  non-existent.nsec3-ns.test.dnssec-tools.org.  Set the DO bit in the
 	  outgoing query.</t>
 	  <t>SUCCESS: A DNS response was received that contains an
@@ -307,7 +318,7 @@
 	  DNAME referral child zone, such as
 	  good-a.dname-good-ns.test.dnssec-tools.net.</t>
 	  <t>SUCCESS: A DNS response was received that contains a
-	   DNAME in the answer section.  An RRSIG must also be
+	   DNAME in the answer section.  An RRSIG MUST also be
 	  received in the answer section that covers the DNAME record.</t>
 	</section>
 	<section title="Permissive DNSSEC"> 
@@ -340,12 +351,12 @@
 	<t>If need be, a Host Validator may need to make
 	direct queries to authoritative servers or known Open
 	Recursive Resolvers in order to collect data.
-	To do that, a number of key network features must be functional.</t>
+	To do that, a number of key network features MUST be functional.</t>
 	<section title="Support for Remote UDP Over Port 53">
 	  <t>Purpose: This tests basic UDP functionality to outside
 	  the local network.</t>
 	  <t>Test: A DNS
-	  request should be sent to a known distant authoritative
+	  request is sent to a known distant authoritative
 	  server for a record known to be within that server's
 	  authoritative data.  Example: send a query to the address of
 	  ns1.dnssec-tools.org for the www.dnssec-tools.org/A record.</t>
@@ -360,7 +371,7 @@
 	  <t> Purpose: This tests if the local network can
 	    receive fragmented UDP answers</t> 
 	  <t>Pre-requisite: Local UDP > 1500 is possible</t> 
-          <t> Test: A DNS request should be sent over UDP to a known
+          <t> Test: A DNS request is sent over UDP to a known
             distant DNS address asking for a record that has answer larger than
             2000 bytes. Example send a query for the dnssec-tools.org/DNSKEY
             record with the DO bit set in the outgoing query. </t>
@@ -374,7 +385,7 @@
 	  <t>Purpose: This tests basic TCP functionality to outside
 	  the local network.</t>
 	  <t>Test: A DNS
-	  request should be sent over TCP to a known distant authoritative
+	  request is sent over TCP to a known distant authoritative
 	  server for a record known to be within that server's
 	  authoritative data.  Example: send a query to the address of
 	  ns1.dnssec-tools.org for the www.dnssec-tools.org/A record.</t>
@@ -409,7 +420,7 @@
 	    operate behind it. It MAY be usable for querying for data
 	    that is in known insecure sections of the DNS tree.</t>
 	    <t hangText="Not a DNS Resolver:"> This is a bad address
-	    and should not be used for any queries.</t> 
+	    and not used anymore.</t> 
 	    </list> 
 	  </t> 
 	<t> While it would be great if all resolvers fell cleanly into
@@ -440,7 +451,7 @@
       this document progresses]</t> 
 
       <t>Once we have determined what level of support is available in
-      the neighboring network, we can determine what must be done in
+      the neighboring network, we can determine what MUST be done in
       order to effectively act as a validating resolver.  This section
       discusses some of the options available given the results from
       the previous sections.</t>
@@ -471,19 +482,19 @@
 
       <t> While attempting resolution through a particular recursive
       name server with a particular transport method that worked, any
-      transport-specific parameters must be remembered in order to
+      transport-specific parameters MUST be remembered in order to
       short-circuit any unnecessary fallback attempts. </t>
 
-      <t> Transport-specific parameters must also be remembered for each
+      <t> Transport-specific parameters MUST also be remembered for each
       authoritative name server that is queried while performing an
       iterative mode lookup. </t>
 
       <t> Any transport settings that are remembered for a particular
-      name server must be periodically refreshed; they should also be
+      name server MUST be periodically refreshed; they should also be
       refreshed when an error is encountered as described below. </t> 
 
       <t>For a stub resolver, problems with the name server
-        may manifest themselves as the following types of error
+        MAY manifest themselves as the following types of error
         conditions:</t>
 
       <t> <list style="symbols">
@@ -500,7 +511,7 @@
             authentication chain do not validate properly. </t> 
       </list> </t>
     
-      <t> For each of the above error conditions a validator may adopt
+      <t> For each of the above error conditions a validator MAY adopt
       the following dynamic fallback technique, preferring a particular approach if
       it is known to work for a given name server or zone from previous
       attempts. </t> 
@@ -540,19 +551,19 @@
       tried when the previous one encounters an error or a timeout is
       reached, whichever is earlier. </t> 
 
-      <t> The validator should remember, in its zone-specific fallback
+      <t> The validator SHOULD remember, in its zone-specific fallback
       cache, any broken behavior identified for a particular zone for 
       a duration of that zone's SOA negative TTL. </t>
 
-      <t> The validator may place name servers that exhibit broken 
+      <t> The validator MAY place name servers that exhibit broken 
       behavior into a blacklist, and bypass these name servers
       for all zones that they are authoritative for. 
-      The validator must time out entries in this name server blacklist
+      The validator MUST time out entries in this name server blacklist
       periodically, where this interval could be set to be the same as
       the DNSSEC BAD cache default TTL.</t>   
 
       <section title="Partial Resolver Usage">
-	<t>It may be possible to use Non-DNSSEC Capable
+	<t>It MAY be possible to use Non-DNSSEC Capable
 	caching resolvers in careful ways if maximum optimization is
 	desired.  This section describes some of the advanced
 	techniques that could be used to use a resolver in at least a
@@ -587,7 +598,7 @@
 	problems when the device needs to resolve their source of time
 	synchronization, such as "ntp.example.com".</t>
 	<t>Changing Network Properties: A newly established network
-	connection may change state shortly after a HTTP-based pay-wall
+	connection MAY change state shortly after a HTTP-based pay-wall
 	authentication system has been used.  This especially common
 	in hotel networks, where DNSSEC, validation and even DNS
 	are not functional until the user proceeds through a series of
@@ -626,7 +637,7 @@
       <t>This document discusses problems that may occur while
       deploying the secure DNSSEC protocol and what mitigation's can be
       used to help detect and mitigate these problems.  Following
-      these suggestions should result in a more secure DNSSEC
+      these suggestions will result in a more secure DNSSEC
       operational environment than if DNSSEC was simply disabled when
       it fails to perform as expected.</t>
     </section>
