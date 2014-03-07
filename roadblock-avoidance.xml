@@ -11,7 +11,7 @@
 <?rfc symrefs="yes" ?>
 <?rfc compact="yes" ?>
 <?rfc subcompact="no" ?>
-<rfc category="bcp" ipr="trust200902" docName="draft-hardaker-dnsop-dnssec-roadblock-avoidance-01.txt">
+<rfc category="bcp" ipr="trust200902" docName="draft-ietf-dnsop-dnssec-roadblock-avoidance-FILLVERSION.txt">
   <front>
     <title abbrev="DNSSEC Roadblock Avoidance">
       DNSSEC Roadblock Avoidance
@@ -56,7 +56,7 @@
         <email>suresh@tislabs.com</email>
       </address>
     </author>
-    <date day="13" month="January" year="2014"/>
+    <date month="MONTH" year="YEAR"/>
     <area> OPS </area>
     <workgroup>DNSOP </workgroup> 
     <keyword>DNSSEC, Network Problems, DNS </keyword> 

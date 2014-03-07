@@ -1,9 +1,9 @@
 MONTH=`date +"%B"`
 YEAR=`date +"%Y"`
 VERSION=00
-DRAFT=draft-hardaker-dnsop-dnssec-roadblock-avoidance-$(VERSION).txt
+DRAFT=draft-ietf-dnsop-dnssec-roadblock-avoidance-$(VERSION).txt
 
-all: draft-hardaker-dnsop-dnssec-roadblock-avoidance-$(VERSION).txt check
+all: draft-ietf-dnsop-dnssec-roadblock-avoidance-$(VERSION).txt check
 
 $(DRAFT): roadblock-avoidance-tmp.xml
 	xml2rfc $< $@
@@ -15,7 +15,7 @@ find-long-lines: roadblock-avoidance-tmp.xml
 	perl column.just.pl roadblock-avoidance-tmp.txt
 
 roadblock-avoidance-tmp.xml: roadblock-avoidance.xml
-	sed -e "s/January/$(MONTH)/;s/1970/$(YEAR)/;s/FILLVERSION/$(VERSION)/" $< > $@
+	sed -e "s/MONTH/$(MONTH)/;s/YEAR/$(YEAR)/;s/FILLVERSION/$(VERSION)/" $< > $@
 
 clean:
 	rm roadblock-avoidance-tmp.xml $(DRAFT)
