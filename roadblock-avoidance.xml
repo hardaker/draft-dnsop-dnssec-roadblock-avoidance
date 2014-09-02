@@ -4,6 +4,7 @@
   <!ENTITY rfc4034 PUBLIC '' 'reference.RFC.4034.xml'>
   <!ENTITY rfc4035 PUBLIC '' 'reference.RFC.4035.xml'>
   <!ENTITY rfc5155 PUBLIC '' 'reference.RFC.5155.xml'>
+  <!ENTITY rfc5625 PUBLIC '' 'reference.RFC.5625.xml'>
 ]>
 <?rfc strict="no" ?>
 <?rfc toc="yes" ?>
@@ -86,8 +87,8 @@
       validating resolvers to effectively obtain the DNSSEC data
       they need.  This can occur for many different reasons including 
 	<list style="symbols"> 
-          <t>Because neighboring recursive resolvers are not fully
-	    DNSSEC compliant </t> 
+          <t>Because neighboring recursive resolvers and DNS proxies
+          <xref target="RFC5625" /> are not fully DNSSEC compliant </t> 
           <t>Because resolvers are not even DNSSEC aware</t> 
           <t>Because "middle-boxes" active block/restrict outbound traffic to
             the DNS port (53) either UDP and/or TCP .</t>
@@ -663,6 +664,7 @@
       &rfc4034;
       &rfc4035;
       &rfc5155;
+      &rfc5625;
     </references>
   </back>
 </rfc>
