@@ -32,16 +32,15 @@
       </address>
     </author>
     <author initials="O." surname="Gudmundsson" fullname="Olafur Gudmundsson">
-      <organization>Shinkuro Inc.</organization>
+      <organization>CloudFlare</organization>
       <address>
         <postal>
-          <street>4922 Fairmont Av, Suite 250</street>
-          <city>Bethesda</city>
-          <region>MD</region>
-          <code>20814</code>
+          <street></street>
+          <city>San Francisco</city>
+          <region>CA</region>
+          <code>94107</code>
           <country>USA</country>
         </postal>
-
         <email>ogud@ogud.com</email>
       </address>
     </author>
