@@ -32,16 +32,15 @@
       </address>
     </author>
     <author initials="O." surname="Gudmundsson" fullname="Olafur Gudmundsson">
-      <organization>Shinkuro Inc.</organization>
+      <organization>CloudFlare</organization>
       <address>
         <postal>
-          <street>4922 Fairmont Av, Suite 250</street>
-          <city>Bethesda</city>
-          <region>MD</region>
-          <code>20814</code>
+          <street></street>
+          <city>San Francisco</city>
+          <region>CA</region>
+          <code>94107</code>
           <country>USA</country>
         </postal>
-
         <email>ogud@ogud.com</email>
       </address>
     </author>
@@ -106,6 +105,12 @@
       prudent to perform these test from regular Validatating Resolvers 
       before enabling just to make sure things work. 
       </t>
+      <t>There are situations where a host can not talk directy to a
+      Resolver the tests below do not address how to overcome that. In
+      these situations it is not uncommon to get results that are not
+      consistent. This mainly happens when there are DNS proxies/forwarders
+      between the user and the actual resolvers. 
+      </t> 
     </section>
 
     <section title="Notation"> 
@@ -158,6 +163,12 @@
       It is a unicast address or an anycast cluster where all servers have 
       identical configuration and connectivity. 
       </t>
+      <t>NOTE: when performing these tests we also assume that the
+      path is clear of "DNS interfering" crapware/middle-boxes, like stupid
+      firewalls, proxies, forwarders. Presence of such crap can easily make
+      the recursive resolver look bad. It is beond the scope of the
+      docuent as how to test around the interferance. 
+      </t> 
       <section title="Determining DNSSEC support in neighboring recursive resolvers">
 	<t>Ideally, a Host Validator can make use of the
 	caching present in neighboring recursive resolvers.  This
