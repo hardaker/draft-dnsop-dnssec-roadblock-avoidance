@@ -12,7 +12,11 @@ Q7/13,Q12
 Q7/No:Fail
 Q7/13:no:Q2
 Q7/No:Fail
-Q12,optional:Q14
+Q12,Q2
 Q12,No:Fail
+Q2,optional:Q14
 optional:Q14,No:Fail
-optional:Q14,DNSSEC Rocks
+optional:Q14,optional:Q15
+optional:Q15,DNSSEC Rocks
+optional:Q15,No:Fail
+
