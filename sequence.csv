@@ -1,0 +1,18 @@
+Q8,Q456
+Q8,No:Fail
+Q456,Q7
+Q456,No:Fail
+Q7,Q10
+Q7,No:Fail
+Q10,Q9
+Q10,No:Fail
+Q9,Q7/13
+Q9,No:Fail
+Q7/13,Q12
+Q7/No:Fail
+Q7/13:no:Q2
+Q7/No:Fail
+Q12,optional:Q14
+Q12,No:Fail
+optional:Q14,No:Fail
+optional:Q14,DNSSEC Rocks
