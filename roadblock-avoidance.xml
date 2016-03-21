@@ -122,8 +122,10 @@
       </t>
       <t> Detecting full non-support for specified DNSKEY algorithms and DS
       digiest algorithms is outside the scope of this document but the
-      document provides information on how to do that, see sample test tool:
-      https://urldefense.proofpoint.com/v2/url?u=https-3A__github.com_ogud_DNSSEC-5FALG-5FCheck&d=BQIGAg&c=Nwf-pp4xtYRe0sCRVM8_LWH54joYF7EKmrYIdfxIq10&r=7F3xPPbBLQPiXqfmOhG9n3tgYA-QjQ7BMB67jO-v4nU&m=HSV0eSchF96qK6iicRQ6ofwuwtvK1yuINyOkPKLvCw8&s=nInE_J6zgVxa81GgEQaB_y_7Nri6He0oiAcfd9gTto0&e= . 
+      document provides information on how to do that, see sample test
+      tool:
+	https://github.com/ogud/DNSSEC_ALG_Check
+
       This document will test compliance with Algorithm 5, 7 and
       Algorithm 13 with DS digest algorithm 1 and 2. 
       </t> 
