@@ -80,8 +80,9 @@
         non-compliant infrastructure.  It poses potential detection and
         mitigation techniques.
       </t>
+ 
     <section title="Background">
-      <t>Deployment of DNSSEC today is hampered by network
+      <t>Deployment of DNSSEC validation is hampered by network
       components that make it difficult or sometimes impossible for
       validating resolvers to effectively obtain the DNSSEC data
       they need.  This can occur for many different reasons including 
@@ -113,6 +114,21 @@
       </t> 
     </section>
 
+    <section title="Implementation experiences"> 
+      <t>Multiple lessons learned from multiple implementations led to
+      the development of this document, including (in alphabetical
+      order) DNSSEC-Tools' DNSSEC-Check, DNSSEC_Resolver_Check, dnssec-trigger, 
+      FCC_Grade.
+      </t>
+      <t> Detecting full non-support for specified DNSKEY algorithms and DS
+      digiest algorithms is outside the scope of this document but the
+      document provides information on how to do that, see sample test tool:
+      https://urldefense.proofpoint.com/v2/url?u=https-3A__github.com_ogud_DNSSEC-5FALG-5FCheck&d=BQIGAg&c=Nwf-pp4xtYRe0sCRVM8_LWH54joYF7EKmrYIdfxIq10&r=7F3xPPbBLQPiXqfmOhG9n3tgYA-QjQ7BMB67jO-v4nU&m=HSV0eSchF96qK6iicRQ6ofwuwtvK1yuINyOkPKLvCw8&s=nInE_J6zgVxa81GgEQaB_y_7Nri6He0oiAcfd9gTto0&e= . 
+      This document will test compliance with Algorithm 5, 7 and
+      Algorithm 13 with DS digest algorithm 1 and 2. 
+      </t> 
+    </section>
+      
     <section title="Notation"> 
       <t>When we talk about a "Host Validator", this can
 	either be a library that an application has linked in or an
@@ -128,11 +144,11 @@
 	document are to be interpreted as described in
 	<xref target="RFC2119" />.
       </t>
-    </section> 
+    </section>
     </section>
 
     <section title="Goals">
-      <t>The result of this work is intended to show how a Host Validator
+      <t>This document is intended to show how a Host Validator
       can detect the capabilities of a nearby recursive resolver, and
       work around any problems that could potentially affect DNSSEC
       resolution.  This enables the Host Validator to
@@ -151,6 +167,12 @@
       proactive tests should or should not be used.  Either way,
       DNSSEC roadblock avoidance techniques ought to be used
       when needed and if possible.</t>
+      <t>Note: The same tests can be used for a recursive resovler to
+      check if its upstream connections hinder DNSSEC validation.</t>
+      <t>This document specifies two sets of tests to perform a
+      comprehensive one and a fast one. The fast one will detect most
+     common problems, thus if the fast one passes then the comprensive
+      MAY be exectued as well. </t>
     </section>
 
     <section title="Detecting DNSSEC Non-Compilance" anchor="tests">
@@ -234,7 +256,7 @@
 	  the response.  Don't worry, they'll fail the later tests.</t>
 	</section>
 
-	<section title="Supports the AD bit">
+	<section title="Supports the AD bit DNSKEY algorithm 5">
 	  <t>Purpose: This tests whether the resolver is a validating
 	  resolver.</t>
 	  <t>Pre-requisite: "Supports the DO bit".</t>
@@ -247,6 +269,7 @@
 
 	  <t>SUCCESS: A DNS response was received that contains the AD
 	  bit set.</t>
+	  <t>BONUS: As AD is set this resolver supports Algorithm 5 RSASHA1</t>
 	</section>
 
 	<section title="Returns RRsig for signed answer">
@@ -317,6 +340,8 @@
 	  outgoing query.</t>
 	  <t>SUCCESS: A DNS response was received that contains an
 	  NSEC3 record.</t>
+	  <t>Bonus: If the AD bit is set, this validator
+	  supports algorithm 7 RSASHA1-NSEC3-SHA1</t>
          <t>Note: The query issued in this test MUST be sent to a
            NSEC3 signed zone. Getting back appropriate NSEC records
            does not indicate a failure, but a bad test.</t> 
@@ -343,7 +368,9 @@
 	  <t> SUCCESS: A reply with the Rcode set to SERVFAIL</t> 
 	</section>
 	<section title="UDP size limits"> 
-	  <t> TBD </t> 
+	  <t> Strictly speaking nothing other than using TCP can be
+	  used to overcome this. Thus the host should use TCP
+	  fallback when UDP query times out. </t> 
 	</section> 
 	<section title="Supports Unknown RRtypes">
 	  <t> Purpose: Some DNS Resolvers/gateways only support some
@@ -404,14 +431,35 @@
 	  ns1.dnssec-tools.org for the www.dnssec-tools.org/A record.</t>
 	  <t>SUCCESS: A DNS response was received that contains an a A
 	  record in the answer section.</t>
-	  <t>Note: an implementation can used the local resolvers for
+	  <t>Note: an implementation can use the local resolvers for
 	  determining the address of the name server that is
 	  authoritative for the given zone.  The recursive bit MAY be
 	  set for this request, but does not need to be.</t>
 	</section>
       </section>
+      <section title="Support for DNSKEY and DS combinations"> 
+	<t>Purpose: These tests can check if an algorithm
+	  combinations are supported.</t>
+	<t>Pre-requesitive: At least one of above tests has returned
+	  AD bit proving upstream is validating</t> 
+	<t> Test: A DNS request is sent over UDP to the resolver
+	  under tests for a known combination of the DS number (N) and
+	  DNSKEY number 
+	  (M) of the form ds-N.alg-M-nsec.dnssec-test.org, for example
+	  ds-2.alg-13-nsec.dnssec-test.org TXT or
+	  ds-4.alg-13-nsec3.dnssec-test.org TXT.</t>
+	
+	<t> SUCCESS: a DNS respose is received with AD bit set with
+	  TXT record in the answer section. </t> 
+	<t> BONUS: AD in response to the exaples above demonstrates
+	support for Algorihtm 13 and the two DS algoritm(s) with both
+	NSEC and NSEC3 </t>
+	<t> Note: for algorithms 6 and 7 NSEC is not defined thus
+	  query for alg-M-nsec3 is requried, simlarly NSEC3 is not
+	  defined for algorithms 1, 3 and 5. Furthermore algorithms 
+	  2, 4, 9, 11 do not have definitions to sign zones. </t> 
+      </section>
     </section>
-
     <section title="Aggregating The Results">
       <t>Some conclusions can be drawn from the results of the above
       tests in an "aggregated" form.  This section defines some labels
@@ -419,7 +467,7 @@
       tests run against them. </t>
       <section title="Resolver capability description"> 
 	<t> This section will group and label certain common results
-	TBD</t>
+	</t>
 	<t> Resolvers are classified into following broad 
 	behaviors: <list style="hanging"> 
 	    <t hangText="Validator:"> The resolver passes all DNSSEC
@@ -457,11 +505,9 @@
     </section>
 
     <section title="Roadblock Avoidance" anchor="solutions">
-      <t>[Editors note: the goal of this document is to tie the above
-      tests and aggregations to avoidance practices; however right now
-      the "tie" part of this text is known to be weak.  The goal of
-      this document is specifically to improve this tie as work on
-      this document progresses]</t> 
+      <t>The goal of this document is to tie the above tests and
+      aggregations to avoidance practices; however the document does
+      not specify exactly how to do that.  </t>
 
       <t>Once we have determined what level of support is available in
       the neighboring network, we can determine what MUST be done in
@@ -593,7 +639,10 @@
 	  tree MAY be sent through Non-DNSSEC Capable caching resolver.</t>
 	</section>
 	<section title="Partial NSEC/NSEC3 Support">
-	  <t>TBD</t>
+	  <t>This is real uncommon and only affects old resolvers,
+	  that also lack support for Unknown types, rendering them
+	  mostly useless and to be avoided.
+	  </t>
 	</section>
       </section>
     </section>
@@ -638,12 +687,41 @@
       </list>
       </t>
       <section title="What To Do">
-	<t>TBD</t>
+	<t>If Host Validator detects that DNSSEC resolution is not
+	possible it SHOULD warn user. In the case there is no user no
+	reporting can be performed thus the device MAY have a policy
+	of action, like continue or fail. </t>
       </section>
     </section>
 
-    <section title="IANA Considerations">
-      <t>No IANA actions are require to support this document</t>
+    <section title="Quick Test"> 
+      <t>The quick tests defined below make the following assumption
+	that the questions are asked of a real resolver and the only
+	real question is: "how complete is the DNSSEC support?".
+	This quick test as been implemented in few programs developed
+	at IETF hackthons at IETF-91 and IETF-92. The programs use a
+	common grading method, for each question that returns expected
+	answer the resolver gets a point. If the AD bit is set as
+	expected the resolver gets a second point. 
+      </t>
+      <section title="Test negative answers Algorithm 5"> 
+	<t> Query: realy-doesnotexist.dnssec-test.org. A</t>
+	<t> Answer: RCODE= NXDOMAIN, Empty Answer, Authority: NSEC
+	proof </t> 
+      </section>
+      <section title="Test Algorithm 8"> 
+	<t> Query: alg-8-nsec3.dnssec-test.org. SOA</t>
+	<t> Answer: RCODE= 0, Answer: SOA record </t> 
+      </section>
+      <section title="Test Algorithm 13"> 
+	<t> Query: alg-13-nsec.dnssec-test.org. SOA</t>
+	<t> Answer: RCODE= 0, Answer: SOA record </t> 
+      </section>
+      <section title="Really fails when DNSSEC does not validate"> 
+	<t> Query: dnssec-failed.org. SOA </t> 
+	<t> Answer: RCODE=SERVFAIL, empty answer, and authority,
+	AD=0</t> 
+      </section>
     </section>
 
     <section title="Security Considerations">
@@ -654,19 +732,17 @@
       operational environment than if DNSSEC was simply disabled when
       it fails to perform as expected.</t>
     </section>
-    
-    <section title="Acknowledgments">
-
-      <t>Multiple lessons learned from multiple implementations led to
-      the development of this document, including (in alphabetical
-      order) DNSSEC-Tools' DNSSEC-Check, DNSSEC_Resolver_Check, dnssec-trigger, 
-      FCC_Grade.
-      </t>
-      
-      <t>The following people contributed to portions of this document
-      in some fashion: ....
-      </t>
+    <section title="IANA Considerations">
+      <t>No IANA actions are required.</t>
     </section>
+
+    
+<!--    <section title="Acknowledgments">
+
+     <t>The following people contributed to portions of this document
+      in some fashion: .... 
+      </t> 
+    </section> -->
     
   </middle>
   <back>
