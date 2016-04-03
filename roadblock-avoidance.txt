@@ -5,14 +5,14 @@
 DNSOP                                                        W. Hardaker
 Internet-Draft                                                   Parsons
 Intended status: Best Current Practice                    O. Gudmundsson
-                                                              CloudFlare
+Expires: October 4, 2016                                      CloudFlare
                                                          S. Krishnaswamy
                                                                  Parsons
-                                                              MONTH YEAR
+                                                           April 2, 2016
 
 
                        DNSSEC Roadblock Avoidance
-      draft-ietf-dnsop-dnssec-roadblock-avoidance-FILLVERSION.txt
+         draft-ietf-dnsop-dnssec-roadblock-avoidance-04-pre.txt
 
 Abstract
 
@@ -37,26 +37,12 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
+   This Internet-Draft will expire on October 4, 2016.
+
 Copyright Notice
 
-   Copyright (c) YEAR IETF Trust and the persons identified as the
+   Copyright (c) 2016 IETF Trust and the persons identified as the
    document authors.  All rights reserved.
-
-
-
-
-
-
-
-
-
-
-
-
-Hardaker, et al.                 Expires                        [Page 1]
-
-Internet-Draft         DNSSEC Roadblock Avoidance             MONTH YEAR
-
 
    This document is subject to BCP 78 and the IETF Trust's Legal
    Provisions Relating to IETF Documents
@@ -64,6 +50,14 @@ Internet-Draft         DNSSEC Roadblock Avoidance             MONTH YEAR
    publication of this document.  Please review these documents
    carefully, as they describe your rights and restrictions with respect
    to this document.  Code Components extracted from this document must
+
+
+
+Hardaker, et al.         Expires October 4, 2016                [Page 1]
+
+Internet-Draft         DNSSEC Roadblock Avoidance             April 2016
+
+
    include Simplified BSD License text as described in Section 4.e of
    the Trust Legal Provisions and are provided without warranty as
    described in the Simplified BSD License.
@@ -100,26 +94,26 @@ Table of Contents
      3.3.  Support for DNSKEY and DS combinations  . . . . . . . . .  11
    4.  Aggregating The Results . . . . . . . . . . . . . . . . . . .  11
      4.1.  Resolver capability description . . . . . . . . . . . . .  12
-   5.  Roadblock Avoidance . . . . . . . . . . . . . . . . . . . . .  13
+   5.  Roadblock Avoidance . . . . . . . . . . . . . . . . . . . . .  12
      5.1.  Partial Resolver Usage  . . . . . . . . . . . . . . . . .  15
        5.1.1.  Known Insecure Lookups  . . . . . . . . . . . . . . .  15
        5.1.2.  Partial NSEC/NSEC3 Support  . . . . . . . . . . . . .  15
    6.  Start-Up and Network Connectivity Issues  . . . . . . . . . .  15
      6.1.  What To Do  . . . . . . . . . . . . . . . . . . . . . . .  16
-
-
-
-Hardaker, et al.                 Expires                        [Page 2]
-
-Internet-Draft         DNSSEC Roadblock Avoidance             MONTH YEAR
-
-
    7.  Quick Test  . . . . . . . . . . . . . . . . . . . . . . . . .  16
-     7.1.  Test negative answers Algorithm 5 . . . . . . . . . . . .  16
+     7.1.  Test negative answers Algorithm 5 . . . . . . . . . . . .  17
      7.2.  Test Algorithm 8  . . . . . . . . . . . . . . . . . . . .  17
      7.3.  Test Algorithm 13 . . . . . . . . . . . . . . . . . . . .  17
      7.4.  Really fails when DNSSEC does not validate  . . . . . . .  17
    8.  Security Considerations . . . . . . . . . . . . . . . . . . .  17
+
+
+
+Hardaker, et al.         Expires October 4, 2016                [Page 2]
+
+Internet-Draft         DNSSEC Roadblock Avoidance             April 2016
+
+
    9.  IANA Considerations . . . . . . . . . . . . . . . . . . . . .  17
    10. Normative References  . . . . . . . . . . . . . . . . . . . .  17
    Authors' Addresses  . . . . . . . . . . . . . . . . . . . . . . .  18
@@ -158,6 +152,11 @@ Internet-Draft         DNSSEC Roadblock Avoidance             MONTH YEAR
    test from regular Validatating Resolvers before enabling just to make
    sure things work.
 
+   There are situations where a host can not talk directy to a Resolver
+   the tests below do not address how to overcome that.  In these
+   situations it is not uncommon to get results that are not consistent.
+   This mainly happens when there are DNS proxies/forwarders between the
+   user and the actual resolvers.
 
 
 
@@ -165,17 +164,25 @@ Internet-Draft         DNSSEC Roadblock Avoidance             MONTH YEAR
 
 
 
-Hardaker, et al.                 Expires                        [Page 3]
+
+Hardaker, et al.         Expires October 4, 2016                [Page 3]
 
-Internet-Draft         DNSSEC Roadblock Avoidance             MONTH YEAR
+Internet-Draft         DNSSEC Roadblock Avoidance             April 2016
 
 
+1.2.  Implementation experiences
+
+   Multiple lessons learned from multiple implementations led to the
+   development of this document, including (in alphabetical order)
    DNSSEC-Tools' DNSSEC-Check, DNSSEC_Resolver_Check, dnssec-trigger,
    FCC_Grade.
 
-   Detecting non-support for specified DNSKEY algorithms and DS digiest
-   algorithms is outside the scope of this document sample test tool:
-   https://github.com/ogud/DNSSEC_ALG_Check.
+   Detecting full non-support for specified DNSKEY algorithms and DS
+   digiest algorithms is outside the scope of this document but the
+   document provides information on how to do that, see sample test
+   tool: https://github.com/ogud/DNSSEC_ALG_Check This document will
+   test compliance with Algorithm 5, 7 and Algorithm 13 with DS digest
+   algorithm 1 and 2.
 
 1.3.  Notation
 
@@ -205,19 +212,19 @@ Internet-Draft         DNSSEC Roadblock Avoidance             MONTH YEAR
    has problems with a recursive resolver based on the results that it
    is getting from real-world queries issued to it, or it can
    proactively test for problems (Section Section 3) to build a work
-
-
-
-Hardaker, et al.                 Expires                        [Page 4]
-
-Internet-Draft         DNSSEC Roadblock Avoidance             MONTH YEAR
-
-
    around list ahead of time (Section Section 5).  There are pros and
    cons to both of these paths that are application specific, and this
    document does not attempt to provide guidance about whether proactive
    tests should or should not be used.  Either way, DNSSEC roadblock
    avoidance techniques ought to be used when needed and if possible.
+
+
+
+
+Hardaker, et al.         Expires October 4, 2016                [Page 4]
+
+Internet-Draft         DNSSEC Roadblock Avoidance             April 2016
+
 
    Note: The same tests can be used for a recursive resovler to check if
    its upstream connections hinder DNSSEC validation.
@@ -262,18 +269,18 @@ Internet-Draft         DNSSEC Roadblock Avoidance             MONTH YEAR
 
    Purpose: This tests basic DNS over UDP functionality to a resolver.
 
-
-
-Hardaker, et al.                 Expires                        [Page 5]
-
-Internet-Draft         DNSSEC Roadblock Avoidance             MONTH YEAR
-
-
    Test: A DNS request is sent to the resolver under test for an A
    record for a known existing domain, such as www.dnssec-tools.org.
 
    SUCCESS: A DNS response was received that contains an a A record in
    the answer section.  (The data itself does not need to be checked.)
+
+
+
+Hardaker, et al.         Expires October 4, 2016                [Page 5]
+
+Internet-Draft         DNSSEC Roadblock Avoidance             April 2016
+
 
    Note: an implementation MAY chose to not perform the rest of the
    tests if this test fails, as clearly the resolver under test is
@@ -317,19 +324,19 @@ Internet-Draft         DNSSEC Roadblock Avoidance             MONTH YEAR
 
    SUCCESS: A DNS response was received that contains the DO bit set.
 
-
-
-
-Hardaker, et al.                 Expires                        [Page 6]
-
-Internet-Draft         DNSSEC Roadblock Avoidance             MONTH YEAR
-
-
    Note: this only tests that the resolver sets the DO bit in the
    response.  Later checks will determine if the DO bit was actually
    made use of.  Some resolvers successfully pass this test because they
    simply copy the unknown flags into the response.  Don't worry,
    they'll fail the later tests.
+
+
+
+
+Hardaker, et al.         Expires October 4, 2016                [Page 6]
+
+Internet-Draft         DNSSEC Roadblock Avoidance             April 2016
+
 
 3.1.5.  Supports the AD bit DNSKEY algorithm 5
 
@@ -372,15 +379,6 @@ Internet-Draft         DNSSEC Roadblock Avoidance             MONTH YEAR
    which is known to exist in a signed zone, such as dnssec-tools.org/
    DNSKEY.  Set the DO bit in the outgoing query.
 
-
-
-
-
-Hardaker, et al.                 Expires                        [Page 7]
-
-Internet-Draft         DNSSEC Roadblock Avoidance             MONTH YEAR
-
-
    SUCCESS: A DNS response was received that contains a DNSKEY record in
    the answer section.
 
@@ -388,6 +386,14 @@ Internet-Draft         DNSSEC Roadblock Avoidance             MONTH YEAR
    problems with large answers this query may result in either false
    positive or false negative.  In general the DNSKEY queried for is a
    small enough to fit into 1220 byte answer, to avoid false negative
+
+
+
+Hardaker, et al.         Expires October 4, 2016                [Page 7]
+
+Internet-Draft         DNSSEC Roadblock Avoidance             April 2016
+
+
    result when TCP is disabled.  However, querying many zones will
    result in answers greater than 1220 bytes so ideally TCP MUST be
    available.
@@ -430,18 +436,19 @@ Internet-Draft         DNSSEC Roadblock Avoidance             MONTH YEAR
 
    Pre-requisite: "Supports the DO bit."
 
-
-
-Hardaker, et al.                 Expires                        [Page 8]
-
-Internet-Draft         DNSSEC Roadblock Avoidance             MONTH YEAR
-
-
    Test: Send a request to the resolver under test for an A record which
-   is known to be non-existent, such as non-existent.nsec3-ns.test
-   .dnssec-tools.org.  Set the DO bit in the outgoing query.
+   is known to be non-existent, such as non-existent.nsec3-
+   ns.test.dnssec-tools.org.  Set the DO bit in the outgoing query.
 
    SUCCESS: A DNS response was received that contains an NSEC3 record.
+
+
+
+
+Hardaker, et al.         Expires October 4, 2016                [Page 8]
+
+Internet-Draft         DNSSEC Roadblock Avoidance             April 2016
+
 
    Bonus: If the AD bit is set, this validator supports algorithm 7
    RSASHA1-NSEC3-SHA1
@@ -470,8 +477,8 @@ Internet-Draft         DNSSEC Roadblock Avoidance             MONTH YEAR
 
    Pre-requisite: Supports the AD bit.
 
-   Test: ask for data from a broken DNSSEC delegation such as
-   badsign-a.test.dnssec-tools.org.
+   Test: ask for data from a broken DNSSEC delegation such as badsign-
+   a.test.dnssec-tools.org.
 
    SUCCESS: A reply with the Rcode set to SERVFAIL
 
@@ -486,18 +493,18 @@ Internet-Draft         DNSSEC Roadblock Avoidance             MONTH YEAR
    Purpose: Some DNS Resolvers/gateways only support some RRtypes.  This
    causes problems for applications that need recently defined types.
 
-
-
-Hardaker, et al.                 Expires                        [Page 9]
-
-Internet-Draft         DNSSEC Roadblock Avoidance             MONTH YEAR
-
-
    Pre-requisite: "Supports UDP or TCP".
 
    Test: Send a request for recently defined type or unknown type in the
    20000-22000 range, that resolves to a server that will return answer
    for all types, such as alltypes.res.dnssecready.org
+
+
+
+Hardaker, et al.         Expires October 4, 2016                [Page 9]
+
+Internet-Draft         DNSSEC Roadblock Avoidance             April 2016
+
 
    SUCCESS: A DNS response was retrieved that contains the type
    requested in the answer section.
@@ -541,16 +548,19 @@ Internet-Draft         DNSSEC Roadblock Avoidance             MONTH YEAR
 
    Success: A DNS response was received that contains the large answer.
 
-
-
-
-Hardaker, et al.                 Expires                       [Page 10]
-
-Internet-Draft         DNSSEC Roadblock Avoidance             MONTH YEAR
-
-
    Note: A failure in getting large answers over UDP is not a serious
    problem if TCP is working.
+
+
+
+
+
+
+
+Hardaker, et al.         Expires October 4, 2016               [Page 10]
+
+Internet-Draft         DNSSEC Roadblock Avoidance             April 2016
+
 
 3.2.3.  Support for Outbound TCP Over Port 53
 
@@ -579,9 +589,9 @@ Internet-Draft         DNSSEC Roadblock Avoidance             MONTH YEAR
    proving upstream is validating
 
    Test: A DNS request is sent over UDP to the resolver under tests for
-   a known combination of the DS (N) and DNSKEY (M) of the form
-   ds-N.alg-M-nsec.dnssec-test.org, for example ds-2.alg-13-nsec.dnssec-
-   test.org TXT or ds-4.alg-13-nsec3.dnssec-test.org TXT.
+   a known combination of the DS number (N) and DNSKEY number (M) of the
+   form ds-N.alg-M-nsec.dnssec-test.org, for example ds-2.alg-13-
+   nsec.dnssec-test.org TXT or ds-4.alg-13-nsec3.dnssec-test.org TXT.
 
    SUCCESS: a DNS respose is received with AD bit set with TXT record in
    the answer section.
@@ -589,26 +599,24 @@ Internet-Draft         DNSSEC Roadblock Avoidance             MONTH YEAR
    BONUS: AD in response to the exaples above demonstrates support for
    Algorihtm 13 and the two DS algoritm(s) with both NSEC and NSEC3
 
-   Note: for algorithms 6 and 7 NSEC is not defined thus query for
-   alg-M-nsec3 is requried, simlarly NSEC3 is not defined for algorithms
-   1, 3 and 5.  Furthermore algorithms 2, 4, 9, 11 do not have
-   definitions to sign zones.
+   Note: for algorithms 6 and 7 NSEC is not defined thus query for alg-
+   M-nsec3 is requried, simlarly NSEC3 is not defined for algorithms 1,
+   3 and 5.  Furthermore algorithms 2, 4, 9, 11 do not have definitions
+   to sign zones.
 
 4.  Aggregating The Results
-
-
-
-
-
-Hardaker, et al.                 Expires                       [Page 11]
-
-Internet-Draft         DNSSEC Roadblock Avoidance             MONTH YEAR
-
 
    Some conclusions can be drawn from the results of the above tests in
    an "aggregated" form.  This section defines some labels to assign to
    a resolver under test given the results of the tests run against
    them.
+
+
+
+Hardaker, et al.         Expires October 4, 2016               [Page 11]
+
+Internet-Draft         DNSSEC Roadblock Avoidance             April 2016
+
 
 4.1.  Resolver capability description
 
@@ -652,20 +660,19 @@ Internet-Draft         DNSSEC Roadblock Avoidance             MONTH YEAR
 
    Permissive:  Passes data known to fail validation
 
-
-
-
-
-Hardaker, et al.                 Expires                       [Page 12]
-
-Internet-Draft         DNSSEC Roadblock Avoidance             MONTH YEAR
-
-
 5.  Roadblock Avoidance
 
    The goal of this document is to tie the above tests and aggregations
    to avoidance practices; however the document does not specify exactly
    how to do that.
+
+
+
+
+Hardaker, et al.         Expires October 4, 2016               [Page 12]
+
+Internet-Draft         DNSSEC Roadblock Avoidance             April 2016
+
 
    Once we have determined what level of support is available in the
    neighboring network, we can determine what MUST be done in order to
@@ -690,10 +697,18 @@ Internet-Draft         DNSSEC Roadblock Avoidance             MONTH YEAR
            Mark it as unusable and try next resolver
 
        Else if no more resolvers are configured and if direct queries
-       are supported try iterating from Root
+       are supported
+           1.  try iterating from Root
 
-       Else return a useful error code
+           2. If the answer is SECURE/BOGUS:
+                Return the result of the iteration
+           3.  If the query is INSECURE:
+                 Re-query "Non-DNSSEC capable" servers and return
+                 answers from them w/o the AD bit set to  the client.
+           This will increase the likelyhood that spit-view unsigned
+           answers are found.
 
+       Else return an useful error code
 
 
    While attempting resolution through a particular recursive name
@@ -705,17 +720,19 @@ Internet-Draft         DNSSEC Roadblock Avoidance             MONTH YEAR
    authoritative name server that is queried while performing an
    iterative mode lookup.
 
+
+
+
+
+
+Hardaker, et al.         Expires October 4, 2016               [Page 13]
+
+Internet-Draft         DNSSEC Roadblock Avoidance             April 2016
+
+
    Any transport settings that are remembered for a particular name
    server MUST be periodically refreshed; they should also be refreshed
    when an error is encountered as described below.
-
-
-
-
-Hardaker, et al.                 Expires                       [Page 13]
-
-Internet-Draft         DNSSEC Roadblock Avoidance             MONTH YEAR
-
 
    For a stub resolver, problems with the name server MAY manifest
    themselves as the following types of error conditions:
@@ -762,16 +779,15 @@ Internet-Draft         DNSSEC Roadblock Avoidance             MONTH YEAR
 
    o  Bogus Response
 
+
+
+Hardaker, et al.         Expires October 4, 2016               [Page 14]
+
+Internet-Draft         DNSSEC Roadblock Avoidance             April 2016
+
+
       *  Perform an iterative query starting from Root if the previous
          error was returned from a lookup that had recursion enabled.
-
-
-
-
-Hardaker, et al.                 Expires                       [Page 14]
-
-Internet-Draft         DNSSEC Roadblock Avoidance             MONTH YEAR
-
 
    For each fallback technique, attempts to multiple potential name
    servers should be skewed such that the next name server is tried when
@@ -817,18 +833,19 @@ Internet-Draft         DNSSEC Roadblock Avoidance             MONTH YEAR
    connectivity issues with respect to DNSSEC validation.  Consider the
    following cases:
 
+
+
+
+
+Hardaker, et al.         Expires October 4, 2016               [Page 15]
+
+Internet-Draft         DNSSEC Roadblock Avoidance             April 2016
+
+
       Time Synchronization: Time synchronization problems can occure
       when a device which has been off for a period of time and the
       clock is no longer in close synchronization with "real time" or
       when a device always has clock set to the same time during start-
-
-
-
-Hardaker, et al.                 Expires                       [Page 15]
-
-Internet-Draft         DNSSEC Roadblock Avoidance             MONTH YEAR
-
-
       up.  This will cause problems when the device needs to resolve
       their source of time synchronization, such as "ntp.example.com".
 
@@ -866,24 +883,24 @@ Internet-Draft         DNSSEC Roadblock Avoidance             MONTH YEAR
 7.  Quick Test
 
    The quick tests defined below make the following assumption that the
-   questions are asked of a real resolver and the only real questions is
-   how complete the DNSSEC support is.  This quick test as been
+   questions are asked of a real resolver and the only real question is:
+   "how complete is the DNSSEC support?".  This quick test as been
    implemented in few programs developed at IETF hackthons at IETF-91
    and IETF-92.  The programs use a common grading method, for each
    question that returns expected answer the resolver gets a point.  If
    the AD bit is set as expected the resolver gets a second point.
 
+
+
+
+Hardaker, et al.         Expires October 4, 2016               [Page 16]
+
+Internet-Draft         DNSSEC Roadblock Avoidance             April 2016
+
+
 7.1.  Test negative answers Algorithm 5
 
    Query: realy-doesnotexist.dnssec-test.org.  A
-
-
-
-
-Hardaker, et al.                 Expires                       [Page 16]
-
-Internet-Draft         DNSSEC Roadblock Avoidance             MONTH YEAR
-
 
    Answer: RCODE= NXDOMAIN, Empty Answer, Authority: NSEC proof
 
@@ -930,19 +947,20 @@ Internet-Draft         DNSSEC Roadblock Avoidance             MONTH YEAR
               Rose, "Protocol Modifications for the DNS Security
               Extensions", RFC 4035, March 2005.
 
+
+
+Hardaker, et al.         Expires October 4, 2016               [Page 17]
+
+Internet-Draft         DNSSEC Roadblock Avoidance             April 2016
+
+
    [RFC5155]  Laurie, B., Sisson, G., Arends, R., and D. Blacka, "DNS
               Security (DNSSEC) Hashed Authenticated Denial of
               Existence", RFC 5155, March 2008.
 
-
-
-Hardaker, et al.                 Expires                       [Page 17]
-
-Internet-Draft         DNSSEC Roadblock Avoidance             MONTH YEAR
-
-
    [RFC5625]  Bellis, R., "DNS Proxy Implementation Guidelines", BCP
-              152, RFC 5625, August 2009.
+              152, RFC 5625, DOI 10.17487/RFC5625, August 2009,
+              <http://www.rfc-editor.org/info/rfc5625>.
 
 Authors' Addresses
 
@@ -960,7 +978,7 @@ Authors' Addresses
    San Francisco, CA  94107
    USA
 
-   Email: ogud@ogud.com
+   Email: olafur+ietf@cloudflare.com
 
 
    Suresh Krishnaswamy
@@ -987,9 +1005,4 @@ Authors' Addresses
 
 
 
-
-
-
-
-
-Hardaker, et al.                 Expires                       [Page 18]
+Hardaker, et al.         Expires October 4, 2016               [Page 18]
