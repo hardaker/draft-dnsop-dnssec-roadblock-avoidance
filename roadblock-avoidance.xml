@@ -13,7 +13,7 @@
 <?rfc compact="yes" ?>
 <?rfc subcompact="no" ?>
 <rfc category="bcp" ipr="trust200902"
-     docName="draft-ietf-dnsop-dnssec-roadblock-avoidance-FILLVERSION.txt">
+     docName="draft-ietf-dnsop-dnssec-roadblock-avoidance-04-pre.txt">
   <front>
     <title abbrev="DNSSEC Roadblock Avoidance">
       DNSSEC Roadblock Avoidance
@@ -41,7 +41,7 @@
           <code>94107</code>
           <country>USA</country>
         </postal>
-        <email>ogud@ogud.com</email>
+        <email>olafur+ietf@cloudflare.com</email>
       </address>
     </author>
     <author initials="S.K." surname="Krishnaswamy" fullname="Suresh Krishnaswamy">
@@ -57,7 +57,7 @@
         <email>suresh@tislabs.com</email>
       </address>
     </author>
-    <date month="MONTH" year="YEAR"/>
+    <date />
     <area> OPS </area>
     <workgroup>DNSOP </workgroup> 
     <keyword>DNSSEC, Network Problems, DNS </keyword> 
@@ -68,7 +68,7 @@
         resolver/application might run into within a  
         non-compliant infrastructure.  It outline potential detection and
         mitigation techniques. The scope of the document is to create
-        a shared approache to detect and overcome network issues that
+        a shared approach to detect and overcome network issues that
         a DNSSEC software/system may face. 
       </t>
     </abstract>
@@ -102,11 +102,11 @@
       hopefully circumvent the problems associated with the network
       defects it discovers. The tests described in this document may
       be performed on any validating resolver to detect and prevent problems.
-      While these recomendations are mainly aimed at Host Validators it it 
-      prudent to perform these test from regular Validatating Resolvers 
+      While these recommendations are mainly aimed at Host Validators it it 
+      prudent to perform these test from regular Validating Resolvers 
       before enabling just to make sure things work. 
       </t>
-      <t>There are situations where a host can not talk directy to a
+      <t>There are situations where a host can not talk directly to a
       Resolver the tests below do not address how to overcome that. In
       these situations it is not uncommon to get results that are not
       consistent. This mainly happens when there are DNS proxies/forwarders
@@ -121,7 +121,7 @@
       FCC_Grade.
       </t>
       <t> Detecting full non-support for specified DNSKEY algorithms and DS
-      digiest algorithms is outside the scope of this document but the
+      digest algorithms is outside the scope of this document but the
       document provides information on how to do that, see sample test
       tool:
 	https://github.com/ogud/DNSSEC_ALG_Check
@@ -169,12 +169,12 @@
       proactive tests should or should not be used.  Either way,
       DNSSEC roadblock avoidance techniques ought to be used
       when needed and if possible.</t>
-      <t>Note: The same tests can be used for a recursive resovler to
+      <t>Note: The same tests can be used for a recursive resolver to
       check if its upstream connections hinder DNSSEC validation.</t>
       <t>This document specifies two sets of tests to perform a
       comprehensive one and a fast one. The fast one will detect most
-     common problems, thus if the fast one passes then the comprensive
-      MAY be exectued as well. </t>
+     common problems, thus if the fast one passes then the comprehensive
+      MAY be executed as well. </t>
     </section>
 
     <section title="Detecting DNSSEC Non-Compilance" anchor="tests">
@@ -183,15 +183,15 @@
       look-ups.  This section outlines tests that can be done to test
       certain features of the surrounding network.</t>
       <t> NOTE: when performing these tests against an address, we make the 
-      following assumtption about that address: 
-      It is a unicast address or an anycast cluster where all servers have 
+      following assumption about that address: 
+      It is a uni-cast address or an any-cast cluster where all servers have 
       identical configuration and connectivity. 
       </t>
       <t>NOTE: when performing these tests we also assume that the
-      path is clear of "DNS interfering" crapware/middle-boxes, like stupid
+      path is clear of "DNS interfering" crap-ware/middle-boxes, like stupid
       firewalls, proxies, forwarders. Presence of such crap can easily make
-      the recursive resolver look bad. It is beond the scope of the
-      docuent as how to test around the interferance. 
+      the recursive resolver look bad. It is beyond the scope of the
+      document as how to test around the interference. 
       </t> 
       <section title="Determining DNSSEC support in neighboring recursive resolvers">
 	<t>Ideally, a Host Validator can make use of the
@@ -442,7 +442,7 @@
       <section title="Support for DNSKEY and DS combinations"> 
 	<t>Purpose: These tests can check if an algorithm
 	  combinations are supported.</t>
-	<t>Pre-requesitive: At least one of above tests has returned
+	<t>Pre-requisite: At least one of above tests has returned
 	  AD bit proving upstream is validating</t> 
 	<t> Test: A DNS request is sent over UDP to the resolver
 	  under tests for a known combination of the DS number (N) and
@@ -451,13 +451,13 @@
 	  ds-2.alg-13-nsec.dnssec-test.org TXT or
 	  ds-4.alg-13-nsec3.dnssec-test.org TXT.</t>
 	
-	<t> SUCCESS: a DNS respose is received with AD bit set with
+	<t> SUCCESS: a DNS response is received with AD bit set with
 	  TXT record in the answer section. </t> 
-	<t> BONUS: AD in response to the exaples above demonstrates
-	support for Algorihtm 13 and the two DS algoritm(s) with both
+	<t> BONUS: AD in response to the examples above demonstrates
+	support for Algorithm 13 and the two DS algorithm(s) with both
 	NSEC and NSEC3 </t>
 	<t> Note: for algorithms 6 and 7 NSEC is not defined thus
-	  query for alg-M-nsec3 is requried, simlarly NSEC3 is not
+	  query for alg-M-nsec3 is required, similarly NSEC3 is not
 	  defined for algorithms 1, 3 and 5. Furthermore algorithms 
 	  2, 4, 9, 11 do not have definitions to sign zones. </t> 
       </section>
@@ -535,9 +535,18 @@
         Mark it as unusable and try next resolver
                       
     Else if no more resolvers are configured and if direct queries 
-    are supported try iterating from Root
+    are supported
+        1.  try iterating from Root
 
-    Else return a useful error code
+        2. If the answer is SECURE/BOGUS: 
+             Return the result of the iteration
+        3.  If the query is INSECURE:
+              Re-query "Non-DNSSEC capable" servers and return 
+              answers from them w/o the AD bit set to  the client.
+        This will increase the likelihood that spit-view unsigned
+        answers are found.
+    
+    Else return an useful error code
 
       </artwork></figure>
 
@@ -655,7 +664,7 @@
       validation.  Consider the following cases:
       <list>
 	<t>Time Synchronization: Time synchronization problems can
-	occure when a device which has been off for a
+	occur when a device which has been off for a
 	period of time and the clock is no longer in close
 	synchronization with "real time" or when a device always
 	has clock set to the same time during start-up.  This will cause
@@ -739,12 +748,11 @@
     </section>
 
     
-<!--    <section title="Acknowledgments">
+   <section title="Acknowledgments">
 
-     <t>The following people contributed to portions of this document
-      in some fashion: .... 
+     <t>We thank Petr Spacek for extensive comments and suggestions. 
       </t> 
-    </section> -->
+    </section> 
     
   </middle>
   <back>
