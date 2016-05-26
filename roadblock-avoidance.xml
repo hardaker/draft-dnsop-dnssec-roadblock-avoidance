@@ -13,7 +13,7 @@
 <?rfc compact="yes" ?>
 <?rfc subcompact="no" ?>
 <rfc category="bcp" ipr="trust200902"
-     docName="draft-ietf-dnsop-dnssec-roadblock-avoidance-04-pre.txt">
+     docName="draft-ietf-dnsop-dnssec-roadblock-avoidance-05aa.txt">
   <front>
     <title abbrev="DNSSEC Roadblock Avoidance">
       DNSSEC Roadblock Avoidance
@@ -66,7 +66,7 @@
       <t>
         This document describes problems that a DNSSEC aware
         resolver/application might run into within a  
-        non-compliant infrastructure.  It outline potential detection and
+        non-compliant infrastructure.  It outlines potential detection and
         mitigation techniques. The scope of the document is to create
         a shared approach to detect and overcome network issues that
         a DNSSEC software/system may face. 
@@ -543,7 +543,7 @@
         3.  If the query is INSECURE:
               Re-query "Non-DNSSEC capable" servers and return 
               answers from them w/o the AD bit set to  the client.
-        This will increase the likelihood that spit-view unsigned
+        This will increase the likelihood that split-view unsigned
         answers are found.
     
     Else return an useful error code
