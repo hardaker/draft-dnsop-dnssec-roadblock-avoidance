@@ -303,8 +303,8 @@
             DNSKEY queried for is a small enough to fit into 1220
             byte answer, to avoid false negative result when TCP is
 	    disabled. However, querying many zones will result in
-        answers greater than 1220 bytes so ideally TCP MUST be
-        available. </t> </section>
+	    answers greater than 1220 bytes so DNS over TCP MUST be
+	    available. </t> </section>
 
 	<section title="Supports querying for DS records">
 	  <t>Purpose: This tests whether a resolver can query for and
@@ -567,7 +567,7 @@
       refreshed when an error is encountered as described below. </t> 
 
       <t>For a stub resolver, problems with the name server
-        MAY manifest themselves as the following types of error
+        can manifest themselves as the following types of error
         conditions:</t>
 
       <t> <list style="symbols">
