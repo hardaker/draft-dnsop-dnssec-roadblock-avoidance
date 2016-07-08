@@ -120,7 +120,7 @@
       order) DNSSEC-Tools' DNSSEC-Check, DNSSEC_Resolver_Check, dnssec-trigger, 
       FCC_Grade.
       </t>
-      <t> Detecting full non-support for specified DNSKEY algorithms and DS
+      <t> Detecting complete lack of support for specified DNSKEY algorithms and DS
       digest algorithms is outside the scope of this document but the
       document provides information on how to do that, see sample test
       tool:
@@ -513,7 +513,7 @@
       not specify exactly how to do that.  </t>
 
       <t>Once we have determined what level of support is available in
-      the neighboring network, we can determine what MUST be done in
+      the neighboring network, we can determine what must be done in
       order to effectively act as a validating resolver.  This section
       discusses some of the options available given the results from
       the previous sections.</t>
@@ -556,7 +556,7 @@
       <t> While attempting resolution through a particular recursive
       name server with a particular transport method that worked, any
       transport-specific parameters MUST be remembered in order to
-      short-circuit any unnecessary fallback attempts. </t>
+      avoid any unnecessary fallback attempts. </t>
 
       <t> Transport-specific parameters MUST also be remembered for each
       authoritative name server that is queried while performing an
@@ -636,7 +636,7 @@
       the DNSSEC BAD cache default TTL.</t>   
 
       <section title="Partial Resolver Usage">
-	<t>It MAY be possible to use Non-DNSSEC Capable
+	<t>It may be possible to use Non-DNSSEC Capable
 	caching resolvers in careful ways if maximum optimization is
 	desired.  This section describes some of the advanced
 	techniques that could be used to use a resolver in at least a
@@ -653,7 +653,7 @@
 	  tree MAY be sent through Non-DNSSEC Capable caching resolver.</t>
 	</section>
 	<section title="Partial NSEC/NSEC3 Support">
-	  <t>This is real uncommon and only affects old resolvers,
+	  <t>This is really uncommon and only affects old resolvers,
 	  that also lack support for Unknown types, rendering them
 	  mostly useless and to be avoided.
 	  </t>
@@ -674,7 +674,7 @@
 	problems when the device needs to resolve their source of time
 	synchronization, such as "ntp.example.com".</t>
 	<t>Changing Network Properties: A newly established network
-	connection MAY change state shortly after a HTTP-based pay-wall
+	connection may change state shortly after a HTTP-based pay-wall
 	authentication system has been used.  This especially common
 	in hotel networks, where DNSSEC, validation and even DNS
 	are not functional until the user proceeds through a series of
