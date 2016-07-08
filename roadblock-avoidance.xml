@@ -188,10 +188,11 @@
       identical configuration and connectivity. 
       </t>
       <t>NOTE: when performing these tests we also assume that the
-      path is clear of "DNS interfering" crap-ware/middle-boxes, like stupid
-      firewalls, proxies, forwarders. Presence of such crap can easily make
-      the recursive resolver look bad. It is beyond the scope of the
-      document as how to test around the interference. 
+      path is clear of "DNS interfering" middle-boxes, like firewalls,
+      proxies, forwarders. Presence of such infrastructure can easily
+      make a recursive resolver appear to be improperly performing. It
+      is beyond the scope of the document as how to test around such
+      interference.
       </t> 
       <section title="Determining DNSSEC support in neighboring recursive resolvers">
 	<t>Ideally, a Host Validator can make use of the
@@ -536,13 +537,15 @@
                       
     Else if no more resolvers are configured and if direct queries 
     are supported
-        1.  try iterating from Root
+        1. Try iterating from Root
 
         2. If the answer is SECURE/BOGUS: 
-             Return the result of the iteration
-        3.  If the answer is INSECURE:
-              Re-query "Non-DNSSEC capable" servers and return 
-              answers from them w/o the AD bit set to  the client.
+           - Return the result of the iteration
+
+        3. If the answer is INSECURE:
+           - Re-query "Non-DNSSEC capable" servers and return 
+           answers from them w/o the AD bit set to the client.
+
         This will increase the likelihood that split-view unsigned
         answers are found.
     
