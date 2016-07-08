@@ -187,7 +187,7 @@
       its network infrastructure has changed.  Certainly a resolver
       should perform these tests when first starting, but MAY also
       perform these tests when they've detected network changes
-      (e.g. address changes, or network reattachment, etc).
+      (e.g. address changes, or network reattachment, etc).</t>
 
       <t> NOTE: when performing these tests against an address, we make the 
       following assumption about that address: 
@@ -711,9 +711,10 @@
       </t>
       <section title="What To Do">
 	<t>If Host Validator detects that DNSSEC resolution is not
-	possible it SHOULD warn user. In the case there is no user no
-	reporting can be performed thus the device MAY have a policy
-	of action, like continue or fail. </t>
+	possible it SHOULD log the event and/or SHOULD warn user. In
+	the case there is no user no reporting can be performed thus
+	the device MAY have a policy of action, like continue or
+	fail. </t>
       </section>
     </section>
 
