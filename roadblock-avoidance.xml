@@ -540,7 +540,7 @@
 
         2. If the answer is SECURE/BOGUS: 
              Return the result of the iteration
-        3.  If the query is INSECURE:
+        3.  If the answer is INSECURE:
               Re-query "Non-DNSSEC capable" servers and return 
               answers from them w/o the AD bit set to  the client.
         This will increase the likelihood that split-view unsigned
