@@ -182,17 +182,26 @@
       bottlenecks exist that may hamper its ability to perform DNSSEC
       look-ups.  This section outlines tests that can be done to test
       certain features of the surrounding network.</t>
+
+      <t>These tests should be performed when a resolver determines
+      its network infrastructure has changed.  Certainly a resolver
+      should perform these tests when first starting, but MAY also
+      perform these tests when they've detected network changes
+      (e.g. address changes, or network reattachment, etc).
+
       <t> NOTE: when performing these tests against an address, we make the 
       following assumption about that address: 
       It is a uni-cast address or an any-cast cluster where all servers have 
       identical configuration and connectivity. 
       </t>
+
       <t>NOTE: when performing these tests we also assume that the
       path is clear of "DNS interfering" middle-boxes, like firewalls,
       proxies, forwarders. Presence of such infrastructure can easily
       make a recursive resolver appear to be improperly performing. It
-      is beyond the scope of the document as how to test around such
-      interference.
+      is beyond the scope of the document as how to work around such
+      interference, although the tests defined in this document may
+      indicate which such misbehaving middle-ware is causing interference.
       </t> 
       <section title="Determining DNSSEC support in neighboring recursive resolvers">
 	<t>Ideally, a Host Validator can make use of the
