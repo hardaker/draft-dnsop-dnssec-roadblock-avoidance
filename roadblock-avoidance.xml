@@ -3,6 +3,7 @@
   <!ENTITY rfc2119 PUBLIC '' 'reference.RFC.2119.xml'>
   <!ENTITY rfc4034 PUBLIC '' 'reference.RFC.4034.xml'>
   <!ENTITY rfc4035 PUBLIC '' 'reference.RFC.4035.xml'>
+  <!ENTITY rfc4786 PUBLIC '' 'reference.RFC.4786.xml'>
   <!ENTITY rfc5155 PUBLIC '' 'reference.RFC.5155.xml'>
   <!ENTITY rfc5625 PUBLIC '' 'reference.RFC.5625.xml'>
 ]>
