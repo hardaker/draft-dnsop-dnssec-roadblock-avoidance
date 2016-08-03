@@ -478,12 +478,12 @@
 	<t> Test: A DNS request is sent over UDP to the resolver
 	  under tests for a known combination of the DS number (N) and
 	  DNSKEY number 
-	  (M) of the form ds-N.alg-M-nsec.dnssec-test.org, for example:
+	  (M) of the form ds-N.alg-M-nsec.test.example.com, for example:
 
       <figure> <artwork>
-	  ds-2.alg-13-nsec.dnssec-test.org TXT
+	  ds-2.alg-13-nsec.test.example.com TXT
 	    or
-	    ds-4.alg-13-nsec3.dnssec-test.org TXT.
+	    ds-4.alg-13-nsec3.test.example.com TXT.
     </artwork> </figure>
     </t>
 	
@@ -755,16 +755,16 @@
 	expected the resolver gets a second point. 
       </t>
       <section title="Test negative answers Algorithm 5"> 
-	<t> Query: realy-doesnotexist.dnssec-test.org. A</t>
+	<t> Query: realy-doesnotexist.test.example.com. A</t>
 	<t> Answer: RCODE= NXDOMAIN, Empty Answer, Authority: NSEC
 	proof </t> 
       </section>
       <section title="Test Algorithm 8"> 
-	<t> Query: alg-8-nsec3.dnssec-test.org. SOA</t>
+	<t> Query: alg-8-nsec3.test.example.com. SOA</t>
 	<t> Answer: RCODE= 0, Answer: SOA record </t> 
       </section>
       <section title="Test Algorithm 13"> 
-	<t> Query: alg-13-nsec.dnssec-test.org. SOA</t>
+	<t> Query: alg-13-nsec.test.example.com. SOA</t>
 	<t> Answer: RCODE= 0, Answer: SOA record </t> 
       </section>
       <section title="Really fails when DNSSEC does not validate"> 
