@@ -14,7 +14,7 @@
 <?rfc compact="yes" ?>
 <?rfc subcompact="no" ?>
 <rfc category="bcp" ipr="trust200902"
-     docName="draft-ietf-dnsop-dnssec-roadblock-avoidance-05aa.txt">
+     docName="draft-ietf-dnsop-dnssec-roadblock-avoidance-06.txt">
   <front>
     <title abbrev="DNSSEC Roadblock Avoidance">
       DNSSEC Roadblock Avoidance
