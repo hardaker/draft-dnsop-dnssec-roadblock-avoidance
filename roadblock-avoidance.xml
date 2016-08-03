@@ -400,11 +400,6 @@
 	  as badsign-a.test.example.com. </t>
 	  <t> SUCCESS: A reply with the Rcode set to SERVFAIL</t> 
 	</section>
-	<section title="UDP size limits"> 
-	  <t> Strictly speaking nothing other than using TCP can be
-	  used to overcome this. Thus the host should use TCP
-	  fallback when UDP query times out. </t> 
-	</section> 
 	<section title="Supports Unknown RRtypes">
 	  <t> Purpose: Some DNS Resolvers/gateways only support some
 	  RRtypes. This causes problems for applications that need
