@@ -146,7 +146,25 @@
 
       This document will test compliance with Algorithm 5, 7 and
       Algorithm 13 with DS digest algorithm 1 and 2. 
-      </t> 
+      </t>
+
+      <section title="Test Zone Implementation">
+	      <t>In this document, the "test.example.com" domain is
+	      used to refer to DNS records which contain test records
+	      that have known DNSSEC properties associated with them.
+	      For example, the "badsign-a.test.example.com" domain is
+	      used below to refer to a DNS A record where the
+	      signatures published for it are invalid (i.e., they are
+	      "bad signatures" that should cause a validation
+	      failure).</t>
+
+	      <t>At the time of this publication, the
+	      "test.dnssec-tools.org" domain implements all of these
+	      test records.  Thus, it may be possible to replace
+	      "test.example.com" in this document with
+	      "test.dnssec-tools.org" when performing real-world
+	      tests.</t>
+      </section>
     </section>
       
     </section>
@@ -223,7 +241,7 @@
 	  <t>Test: A DNS
 	  request is sent to the resolver under test for an A
 	  record for a known existing domain, such as
-	  www.dnssec-tools.org.</t>
+	  good-a.test.example.com.</t>
 	  <t>SUCCESS: A DNS response was received that contains an a A
 	  record in the answer section.  (The data itself does not need
 	  to be checked.)</t>
@@ -236,7 +254,7 @@
 	  <t>Test: A DNS
 	  request is sent over TCP to the resolver under test for an A
 	  record for a known existing domain, such as
-	  www.dnssec-tools.org.</t>
+	  good-a.test.example.com.</t>
 	  <t>SUCCESS: A DNS response was received that contains an A
 	  record in the answer section.  (The data itself does not need
 	  to be checked.)</t>
@@ -248,7 +266,7 @@
 	  <t> Pre-requisite: "Supports UDP or TCP".</t>
 	  <t>Test: Send a request to the resolver under test for an
 	  A record for a known existing domain, such as
-	  www.dnssec-tools.org, with an EDNS0 OPT record in the
+	  good-a.test.example.com, with an EDNS0 OPT record in the
 	  additional section.</t>
 
 	  <t>SUCCESS: A DNS response was received that contains 
@@ -260,7 +278,7 @@
 	  </t>
 	  <t> Pre-requisite: "Supports EDNS0".</t>
 	  <t>Test: Send a request to the resolver under test for an A record
-	  for a known existing domain such as www.dnssec-tools.org.
+	  for a known existing domain such as good-a.test.example.com.
 	  Set the DO bit in the outgoing query.</t>
 	  <t>SUCCESS: A DNS response was received that contains the DO
 	  bit set.</t>
@@ -278,7 +296,7 @@
 	  <t>Test: Send a request to the resolver under test for an A
 	  record for a known existing domain in a DNSSEC signed zone
 	  which is verifiable to a configured trust anchor, such as
-	  www.dnssec-tools.org using the root's published DNSKEY or DS
+	  good-a.test.example.com using the root's published DNSKEY or DS
 	  record as a trust anchor.  Set the DO bit in the outgoing
 	  query.</t>
 
@@ -293,7 +311,7 @@
 	  <t>Pre-requisite: "Supports the DO bit".</t>
 	  <t>Test: Send a request to the resolver
 	  under test for an A record for a known existing domain in a
-	  DNSSEC signed zone, such as www.dnssec-tools.org.  Set the
+	  DNSSEC signed zone, such as good-a.test.example.com.  Set the
 	  DO bit in the outgoing query.</t>
 
 	  <t>SUCCESS: A DNS response was received that contains at
@@ -306,7 +324,7 @@
 	  <t>Pre-requisite: "Supports the DO bit."</t>
 	  <t>Test: Send a request to the resolver under test for an DNSKEY
 	  record which is known to exist in a signed zone, such as
-	  dnssec-tools.org/DNSKEY.  Set the DO bit in the outgoing query.</t>
+	  test.example.com/DNSKEY.  Set the DO bit in the outgoing query.</t>
 	  <t>SUCCESS: A DNS response was received that contains a
 	   DNSKEY record in the answer section.</t>
           <t> Note: Some DNSKEY RRset's are large and if the network
@@ -324,7 +342,7 @@
 	  <t>Pre-requisite: "Supports the DO bit."</t>
 	  <t>Test: Send a request to the resolver under test for an DS
 	    record which is known to exist in a signed zone, such as
-	    dnssec-tools.org/DS.  Set the DO bit in the outgoing query.</t>
+	    test.example.com/DS.  Set the DO bit in the outgoing query.</t>
 	  <t>SUCCESS: A DNS response was received that contains a
 	    DS record in the answer section.</t>
 	</section>
@@ -335,7 +353,7 @@
 	  <t>Pre-requisite: "Supports the DO bit."</t>
 	  <t>Test: Send a request to the resolver under test for an A
 	    record which is known to not existing, such as
-	    non-existent.test.dnssec-tools.org.  Set the DO bit in the
+	    non-existent.test.example.com.  Set the DO bit in the
 	  outgoing query.</t>
 	  <t>SUCCESS: A DNS response was received that contains an
 	    NSEC record.</t>
@@ -351,7 +369,7 @@
 	  <t>Pre-requisite: "Supports the DO bit."</t>
 	  <t>Test: Send a request to the resolver under test for an A
 	  record which is known to be non-existent, such as
-	  non-existent.nsec3-ns.test.dnssec-tools.org.  Set the DO bit in the
+	  non-existent.nsec3-ns.test.example.com.  Set the DO bit in the
 	  outgoing query.</t>
 	  <t>SUCCESS: A DNS response was received that contains an
 	  NSEC3 record.</t>
@@ -369,7 +387,7 @@
 	  <t>Test: Send a request to the resolver under test for an A
 	  record which is known to exist in a signed zone within a
 	  DNAME referral child zone, such as
-	  good-a.dname-good-ns.test.dnssec-tools.net.</t>
+	  good-a.dname-good-ns.test.example.com.</t>
 	  <t>SUCCESS: A DNS response was received that contains a
 	   DNAME in the answer section.  An RRSIG MUST also be
 	  received in the answer section that covers the DNAME record.</t>
@@ -379,7 +397,7 @@
 	  DNSSEC validation failures. </t>
 	  <t> Pre-requisite:  Supports the AD bit.</t> 
 	  <t> Test: ask for data from a broken DNSSEC delegation such
-	  as badsign-a.test.dnssec-tools.org. </t>
+	  as badsign-a.test.example.com. </t>
 	  <t> SUCCESS: A reply with the Rcode set to SERVFAIL</t> 
 	</section>
 	<section title="UDP size limits"> 
@@ -414,7 +432,7 @@
 	  request is sent to a known distant authoritative
 	  server for a record known to be within that server's
 	  authoritative data.  Example: send a query to the address of
-	  ns1.dnssec-tools.org for the www.dnssec-tools.org/A record.</t>
+	  ns1.test.example.com for the good-a.test.example.com/A record.</t>
 	  <t>SUCCESS: A DNS response was received that contains an a A
 	  record in the answer section.</t>
 	  <t>Note: an implementation can use the local resolvers for
@@ -428,7 +446,7 @@
 	  <t>Pre-requisite: Local UDP > 1500 is possible</t> 
           <t> Test: A DNS request is sent over UDP to a known
             distant DNS address asking for a record that has answer larger than
-            2000 bytes. Example send a query for the dnssec-tools.org/DNSKEY
+            2000 bytes. Example send a query for the test.example.com/DNSKEY
             record with the DO bit set in the outgoing query. </t>
           <t> Success: A DNS response was received that contains the
             large answer. </t> 
@@ -443,7 +461,7 @@
 	  request is sent over TCP to a known distant authoritative
 	  server for a record known to be within that server's
 	  authoritative data.  Example: send a query to the address of
-	  ns1.dnssec-tools.org for the www.dnssec-tools.org/A record.</t>
+	  ns1.test.example.com for the good-a.test.example.com/A record.</t>
 	  <t>SUCCESS: A DNS response was received that contains an a A
 	  record in the answer section.</t>
 	  <t>Note: an implementation can use the local resolvers for
