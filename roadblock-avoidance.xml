@@ -138,7 +138,7 @@
       order) DNSSEC-Tools' DNSSEC-Check, DNSSEC_Resolver_Check, dnssec-trigger, 
       FCC_Grade.
       </t>
-      <t> Detecting complete lack of support for specified DNSKEY algorithms and DS
+      <t> Detecting lack of support for specified DNSKEY algorithms and DS
       digest algorithms is outside the scope of this document but the
       document provides information on how to do that, see sample test
       tool:
