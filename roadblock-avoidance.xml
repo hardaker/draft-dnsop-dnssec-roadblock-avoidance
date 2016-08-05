@@ -189,12 +189,10 @@
       proactive tests should or should not be used.  Either way,
       DNSSEC roadblock avoidance techniques ought to be used
       when needed and if possible.</t>
+
       <t>Note: The same tests can be used for a recursive resolver to
       check if its upstream connections hinder DNSSEC validation.</t>
-      <t>This document specifies two sets of tests to perform: a
-      comprehensive one and a fast one. The fast one will detect most
-     common problems, thus if the fast one passes then the comprehensive
-      MAY be considered passed as well. </t>
+
     </section>
 
     <section title="Detecting DNSSEC Non-Compilance" anchor="tests">
@@ -224,6 +222,12 @@
       interference, although the tests defined in this document may
       indicate which such misbehaving middle-ware is causing interference.
       </t> 
+
+      <t>NOTE: This document specifies two sets of tests to perform: a
+      comprehensive one and a fast one. The fast one will detect most
+      common problems, thus if the fast one passes then the comprehensive
+      MAY be considered passed as well. </t>
+
       <section title="Determining DNSSEC support in neighboring recursive resolvers">
 	<t>Ideally, a Host Validator can make use of the
 	caching present in neighboring recursive resolvers.  This
