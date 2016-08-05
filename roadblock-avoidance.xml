@@ -738,7 +738,10 @@
 	possible it SHOULD log the event and/or SHOULD warn user. In
 	the case there is no user no reporting can be performed thus
 	the device MAY have a policy of action, like continue or
-	fail. </t>
+	fail. Until middle boxes allow DNSSEC protected information to
+	traverse them consistently, software implementations may need
+	to offer this choice to let users pick the security level they
+	require.</t>
       </section>
     </section>
 
