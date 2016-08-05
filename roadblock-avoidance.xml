@@ -479,9 +479,9 @@
 	  (M) of the form ds-N.alg-M-nsec.test.example.com, for example:
 
       <figure> <artwork>
-	  ds-2.alg-13-nsec.test.example.com TXT
-	    or
-	    ds-4.alg-13-nsec3.test.example.com TXT.
+          ds-2.alg-13-nsec.test.example.com TXT
+               or
+          ds-4.alg-13-nsec3.test.example.com TXT.
     </artwork> </figure>
     </t>
 	
