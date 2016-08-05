@@ -65,30 +65,33 @@
     <abstract>
       <!-- $Revision: 1.28 $ -->
       <t>
-        This document describes problems that a DNSSEC aware
-        resolver/application might run into within a  
-        non-compliant infrastructure.  It outlines potential detection and
-        mitigation techniques. The scope of the document is to create
-        a shared approach to detect and overcome network issues that
-        a DNSSEC software/system may face. 
+        This document describes problems that a Validating DNS
+        resolver, stub-resolver or application might run into within a
+        non-compliant infrastructure.  It outlines potential detection
+        and mitigation techniques. The scope of the document is to
+        create a shared approach to detect and overcome network issues
+        that a DNSSEC software/system may face.
       </t>
     </abstract>
   </front>
   <middle>
     <section title="Introduction">
-      <t>This document describes problems with DNSSEC (<xref
-      target="RFC4034" />, <xref target="RFC4035" />) deployment due to
-        non-compliant infrastructure.  It poses potential detection and
-        mitigation techniques.
+      <t>This document describes problems observable during DNSSEC
+      (<xref target="RFC4034" />, <xref target="RFC4035" />)
+      deployment that derive from non-compliant infrastructure.  It
+      poses potential detection and mitigation techniques.
       </t>
  
     <section title="Notation"> 
       <t>When we talk about a "Host Validator", this can
-	either be a library that an application has linked in or a
-	validating resolver daemon running on the same machine.</t> 
+	either be a validating stub-resolver, such as library that an
+	application has linked in, or a validating resolver daemon
+	running on the same machine.  It may or may not be trying to
+	use upstream caching resolvers during its own resolution
+        process; both cases are covered by the tests defined in this document.</t>
       <t> A variant of this is a "Validating Forwarding Resolver",
 	which is a resolver that is configured to use upstream
-	Resolvers if possible. Validating Forward Resolver needs to
+	Resolvers if possible. A Validating Forward Resolver needs to
 	perform the same set of tests before using an upstream
 	recursive resolver. </t> 
       <t>
@@ -103,14 +106,15 @@
       <t>Deployment of DNSSEC validation is hampered by network
       components that make it difficult or sometimes impossible for
       validating resolvers to effectively obtain the DNSSEC data
-      they need.  This can occur for many different reasons including 
+      they need.  This can occur for many different reasons including,
+      but not limited to:
 	<list style="symbols"> 
-          <t>Because neighboring recursive resolvers and DNS proxies
+          <t>Because recursive resolvers and DNS proxies
           <xref target="RFC5625" /> are not fully DNSSEC compliant </t> 
           <t>Because resolvers are not DNSSEC aware</t> 
-          <t>Because "middle-boxes" actively block/restrict outbound traffic to
+          <t>Because "middle-boxes" actively block, modify and/or restrict outbound traffic to
             the DNS port (53) either UDP and/or TCP .</t>
-          <t>Network components in path do not allow UDP
+          <t>In-path network components do not allow UDP
 	    fragments</t> 
           <t>etc... </t>
         </list> 
@@ -124,11 +128,12 @@
       prudent to perform these tests from regular Validating Resolvers 
       before enabling just to make sure things work. 
       </t>
-      <t>There are situations where a host can not talk directly to a
-      Resolver the tests below do not address how to overcome that. In
-      these situations it is not uncommon to get results that are
-      inconsistent. This mainly happens when there are DNS
-      proxies/forwarders between the user and the actual resolvers.
+      <t>
+      There are situations where a host can not talk directly to a
+      Resolver; the tests below can not address how to overcome that,
+      and inconsistent results can be seen in such cases. This can
+      happen, for instance, when there are DNS proxies/forwarders
+      between the user and the actual resolvers.
       </t> 
     </section>
 
@@ -143,9 +148,10 @@
       document provides information on how to do that, see sample test
       tool:
 	https://github.com/ogud/DNSSEC_ALG_Check
-
-      This document will test compliance with Algorithm 5, 7 and
-      Algorithm 13 with DS digest algorithm 1 and 2. 
+      </t>
+      <t>
+      This document describes compliance tests for algorithms 5, 7 and
+      13 with DS digest algorithms 1 and 2. 
       </t>
 
       <section title="Test Zone Implementation">
@@ -171,7 +177,7 @@
 
     <section title="Goals">
       <t>This document is intended to show how a Host Validator
-      can detect the capabilities of a nearby recursive resolver, and
+      can detect the capabilities of a recursive resolver, and
       work around any problems that could potentially affect DNSSEC
       resolution.  This enables the Host Validator to
       make use of the caching functionality of the recursive resolver,
@@ -181,23 +187,24 @@
       <t>A Host Validator has two choices: it can wait to
       determine that it has problems with a recursive resolver based
       on the results that it is getting from real-world queries issued
-      to it, or it can proactively test for problems (Section <xref
+      to it, or it can proactively test for problems (<xref
       target="tests" />) to build a work around list ahead of time
-      (Section <xref target="solutions" />).  There are pros and cons
+      (<xref target="solutions" />).  There are pros and cons
       to both of these paths that are application specific, and this
       document does not attempt to provide guidance about whether
       proactive tests should or should not be used.  Either way,
       DNSSEC roadblock avoidance techniques ought to be used
       when needed and if possible.</t>
 
-      <t>Note: The same tests can be used for a recursive resolver to
-      check if its upstream connections hinder DNSSEC validation.</t>
+      <t>Note: Besides being useful for Host Validators, the same
+      tests can be used for a recursive resolver to check if its
+      upstream connections hinder DNSSEC validation.</t>
 
     </section>
 
-    <section title="Detecting DNSSEC Non-Compilance" anchor="tests">
+    <section title="Detecting DNSSEC Non-Compliance" anchor="tests">
       <t>A Host Validator may choose to determine early-on what
-      bottlenecks exist that may hamper its ability to perform DNSSEC
+      roadblocks exist that may hamper its ability to perform DNSSEC
       look-ups.  This section outlines tests that can be done to test
       certain features of the surrounding network.</t>
 
@@ -211,7 +218,7 @@
       following assumption about that address: 
       It is a uni-cast address or an any-cast <xref target="RFC4786" />
       cluster where all servers have 
-      identical configuration and connectivity. 
+      identical configuration and connectivity.
       </t>
 
       <t>NOTE: when performing these tests we also assume that the
@@ -228,10 +235,10 @@
       common problems, thus if the fast one passes then the comprehensive
       MAY be considered passed as well. </t>
 
-      <section title="Determining DNSSEC support in neighboring recursive resolvers">
+      <section title="Determining DNSSEC support in recursive resolvers">
 	<t>Ideally, a Host Validator can make use of the
-	caching present in neighboring recursive resolvers.  This
-	section discusses the tests that a neighboring recursive resolver
+	caching present in recursive resolvers.  This
+	section discusses the tests that a recursive resolver
 	MUST pass in order to be fully usable as a near-by DNS
 	cache.</t>
 	<t>Unless stated otherwise, all of the following tests SHOULD
@@ -246,12 +253,12 @@
 	  request is sent to the resolver under test for an A
 	  record for a known existing domain, such as
 	  good-a.test.example.com.</t>
-	  <t>SUCCESS: A DNS response was received that contains an a A
+	  <t>SUCCESS: A DNS response was received that contains an A
 	  record in the answer section.  (The data itself does not need
 	  to be checked.)</t>
 	  <t>Note: an implementation MAY chose to not perform the rest
-	  of the tests if this test fails, as clearly the resolver
-	  under test is severely broken.</t>
+	  of the tests if this test fails, as it is highly unlikely
+	  that the resolver under test will pass any of the remaining tests.</t>
 	</section>
 	<section title="Supports TCP answers">
 	  <t>Purpose: This tests basic TCP functionality to a resolver.  </t>
@@ -435,7 +442,7 @@
 	  server for a record known to be within that server's
 	  authoritative data.  Example: send a query to the address of
 	  ns1.test.example.com for the good-a.test.example.com/A record.</t>
-	  <t>SUCCESS: A DNS response was received that contains an a A
+	  <t>SUCCESS: A DNS response was received that contains an A
 	  record in the answer section.</t>
 	  <t>Note: an implementation can use the local resolvers for
 	  determining the address of the name server that is
@@ -464,7 +471,7 @@
 	  server for a record known to be within that server's
 	  authoritative data.  Example: send a query to the address of
 	  ns1.test.example.com for the good-a.test.example.com/A record.</t>
-	  <t>SUCCESS: A DNS response was received that contains an a A
+	  <t>SUCCESS: A DNS response was received that contains an A
 	  record in the answer section.</t>
 	  <t>Note: an implementation can use the local resolvers for
 	  determining the address of the name server that is
@@ -473,12 +480,12 @@
 	</section>
       </section>
       <section title="Support for DNSKEY and DS combinations"> 
-	<t>Purpose: These tests can check if an algorithm
+	<t>Purpose: These tests can check what algorithm
 	  combinations are supported.</t>
 	<t>Pre-requisite: At least one of above tests has returned
 	  AD bit proving upstream is validating</t> 
 	<t> Test: A DNS request is sent over UDP to the resolver
-	  under tests for a known combination of the DS number (N) and
+	  under test for a known combination of the DS number (N) and
 	  DNSKEY number 
 	  (M) of the form ds-N.alg-M-nsec.test.example.com, for example:
 
@@ -550,7 +557,7 @@
       not specify exactly how to do that.  </t>
 
       <t>Once we have determined what level of support is available in
-      the neighboring network, we can determine what must be done in
+      the network, we can determine what must be done in
       order to effectively act as a validating resolver.  This section
       discusses some of the options available given the results from
       the previous sections.</t>
@@ -586,7 +593,7 @@
         This will increase the likelihood that split-view unsigned
         answers are found.
     
-    Else return an useful error code
+    Else return an error code and log a failure
 
       </artwork></figure>
 
@@ -690,9 +697,10 @@
 	  tree MAY be sent through Non-DNSSEC Capable caching resolver.</t>
 	</section>
 	<section title="Partial NSEC/NSEC3 Support">
-	  <t>This is really uncommon and only affects old resolvers,
-	  that also lack support for Unknown types, rendering them
-	  mostly useless and to be avoided.
+	  <t>Resolvers that understand DNSSEC generally, and
+          understand NSEC but not NSEC3 are partially usable.  These
+          resolvers generally also lack support for Unknown types,
+          rendering them mostly useless and to be avoided.
 	  </t>
 	</section>
       </section>
@@ -715,7 +723,7 @@
 	authentication system has been used.  This especially common
 	in hotel networks, where DNSSEC, validation and even DNS
 	are not functional until the user proceeds through a series of
-	forced web pages used to enable their network.  The tests in Section <xref
+	forced web pages used to enable their network.  The tests in <xref
 	target="tests" /> will produce very different results before and
 	after the network authorization has succeeded.  APIs exist on
 	many operating systems to detect initial network device status
@@ -772,8 +780,8 @@
 	<t> Query: alg-13-nsec.test.example.com. SOA</t>
 	<t> Answer: RCODE= 0, Answer: SOA record </t> 
       </section>
-      <section title="Really fails when DNSSEC does not validate"> 
-	<t> Query: dnssec-failed.org. SOA </t> 
+      <section title="Fails when DNSSEC does not validate"> 
+	<t> Query: dnssec-failed.test.example.com. SOA </t> 
 	<t> Answer: RCODE=SERVFAIL, empty answer, and authority,
 	AD=0</t> 
       </section>
@@ -781,11 +789,10 @@
 
     <section title="Security Considerations">
       <t>This document discusses problems that may occur while
-      deploying the secure DNSSEC protocol and what mitigation's can be
-      used to help detect and mitigate these problems.  Following
-      these suggestions will result in a more secure DNSSEC
-      operational environment than if DNSSEC was simply disabled when
-      it fails to perform as expected.</t>
+      deploying the DNSSEC protocol.  It describes what may be
+      possible to help detect and mitigate these problems.  Following
+      the outlined suggestions will result in a more secure DNSSEC
+      operational environment than if DNSSEC was simply disabled.</t>
     </section>
     <section title="IANA Considerations">
       <t>No IANA actions are required.</t>
