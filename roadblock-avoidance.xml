@@ -289,20 +289,23 @@
 	  the response.  Don't worry, they'll fail the later tests.</t>
 	</section>
 
-	<section title="Supports the AD bit DNSKEY algorithm 5">
+	<section title="Supports the AD bit DNSKEY algorithm 5 and 8">
 	  <t>Purpose: This tests whether the resolver is a validating
 	  resolver.</t>
 	  <t>Pre-requisite: "Supports the DO bit".</t>
-	  <t>Test: Send a request to the resolver under test for an A
+	  <t>Test: Send requests to the resolver under test for an A
 	  record for a known existing domain in a DNSSEC signed zone
 	  which is verifiable to a configured trust anchor, such as
 	  good-a.test.example.com using the root's published DNSKEY or DS
 	  record as a trust anchor.  Set the DO bit in the outgoing
-	  query.</t>
+	  query.  This test should be done twice, once for a zone that
+	  contains algorithm 5 (RSASHA1) and another for algorithm 8
+	  (RSASHA256).</t>
 
 	  <t>SUCCESS: A DNS response was received that contains the AD
 	  bit set.</t>
-	  <t>BONUS: As AD is set this resolver supports Algorithm 5 RSASHA1</t>
+	  <t>BONUS: As AD is set this resolver supports Algorithm 8
+	  RSASHA256</t>
 	</section>
 
 	<section title="Returns RRsig for signed answer">
