@@ -116,10 +116,9 @@
             the DNS port (53) either UDP and/or TCP .</t>
           <t>In-path network components do not allow UDP
 	    fragments</t> 
-          <t>etc... </t>
         </list> 
       </t>
-      <t>This document talks about ways a Host Validator can detect
+      <t>This document talks about ways that a Host Validator can detect
       the state of the network it is attached to, and ways to
       hopefully circumvent the problems associated with the network
       defects it discovers. The tests described in this document may
@@ -150,7 +149,7 @@
 	https://github.com/ogud/DNSSEC_ALG_Check
       </t>
       <t>
-      This document describes compliance tests for algorithms 5, 7 and
+      This document does describe compliance tests for algorithms 5, 7 and
       13 with DS digest algorithms 1 and 2. 
       </t>
 
@@ -227,7 +226,7 @@
       make a recursive resolver appear to be improperly performing. It
       is beyond the scope of the document as how to work around such
       interference, although the tests defined in this document may
-      indicate which such misbehaving middle-ware is causing interference.
+      indicate when such misbehaving middle-ware is causing interference.
       </t> 
 
       <t>NOTE: This document specifies two sets of tests to perform: a
@@ -239,14 +238,14 @@
 	<t>Ideally, a Host Validator can make use of the
 	caching present in recursive resolvers.  This
 	section discusses the tests that a recursive resolver
-	MUST pass in order to be fully usable as a near-by DNS
+	MUST pass in order to be fully usable as a DNS
 	cache.</t>
 	<t>Unless stated otherwise, all of the following tests SHOULD
 	have the Recursion Desired (RD) flag set when sending out a query and
 	SHOULD be sent over UDP.  Unless otherwise stated, the tests
 	MUST NOT have the DO bit set or utilize any of the other
-	DNSSEC related requirements, like EDNS0.  The tests are
-	designed to check for one feature at a time.</t>
+	DNSSEC related requirements, like EDNS0, unless otherwise
+	specified. The tests are designed to check for support of one feature at a time.</t>
 	<section title="Supports UDP answers">
 	  <t>Purpose: This tests basic DNS over UDP functionality to a resolver.  </t>
 	  <t>Test: A DNS
