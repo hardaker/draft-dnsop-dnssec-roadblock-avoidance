@@ -83,17 +83,17 @@
       </t>
  
     <section title="Notation"> 
-      <t>When we talk about a "Host Validator", this can
+      <t>In this document a "Host Validator" can
 	either be a validating stub-resolver, such as library that an
 	application has linked in, or a validating resolver daemon
 	running on the same machine.  It may or may not be trying to
 	use upstream caching resolvers during its own resolution
         process; both cases are covered by the tests defined in this document.</t>
-      <t> A variant of this is a "Validating Forwarding Resolver",
+      <t> The sub-variant of this is a "Validating Forwarding Resolver",
 	which is a resolver that is configured to use upstream
-	Resolvers if possible. A Validating Forward Resolver needs to
-	perform the same set of tests before using an upstream
-	recursive resolver. </t> 
+	Resolvers when possible. A Validating Forward Resolver also
+	needs to perform the tests outlined in this document before
+	using an upstream recursive resolver. </t>
       <t>
 	The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT",
 	"SHOULD", "SHOULD NOT", "RECOMMENDED", "MAY", and "OPTIONAL" in this
