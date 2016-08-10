@@ -753,7 +753,10 @@
 	continue or fail. Until middle boxes allow DNSSEC protected
 	information to traverse them consistently, software
 	implementations may need to offer this choice to let users
-	pick the security level they require.</t>
+	pick the security level they require.  Note that continuing
+	without DNSSEC protection in the absence of a notification or
+	report could lead to situations where users assume a level of
+	security does not exist.</t>
       </section>
     </section>
 
