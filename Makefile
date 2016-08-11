@@ -1,6 +1,6 @@
 MONTH=`date +"%B"`
 YEAR=`date +"%Y"`
-VERSION=06
+VERSION=05
 DRAFT=draft-ietf-dnsop-dnssec-roadblock-avoidance-$(VERSION).txt
 
 all: draft-ietf-dnsop-dnssec-roadblock-avoidance-$(VERSION).txt check

@@ -14,7 +14,7 @@
 <?rfc compact="yes" ?>
 <?rfc subcompact="no" ?>
 <rfc category="bcp" ipr="trust200902"
-     docName="draft-ietf-dnsop-dnssec-roadblock-avoidance-06.txt">
+     docName="draft-ietf-dnsop-dnssec-roadblock-avoidance-05.txt">
   <front>
     <title abbrev="DNSSEC Roadblock Avoidance">
       DNSSEC Roadblock Avoidance
@@ -343,11 +343,11 @@
           <t> Note: Some DNSKEY RRset's are large and if the network
             path has problems with large answers this query may result
             in either false positive or false negative. In general the
-            DNSKEY queried for is a small enough to fit into 1220
+            DNSKEY queried for should be small enough to fit into a 1220
             byte answer, to avoid false negative result when TCP is
 	    disabled. However, querying many zones will result in
 	    answers greater than 1220 bytes so DNS over TCP MUST be
-	    available. </t> </section>
+	    available for DNSSEC use in general. </t> </section>
 
 	<section title="Supports querying for DS records">
 	  <t>Purpose: This tests whether a resolver can query for and
@@ -365,9 +365,9 @@
 	    NSEC records for a non-existing domain in a DNSSEC signed zone.</t>
 	  <t>Pre-requisite: "Supports the DO bit."</t>
 	  <t>Test: Send a request to the resolver under test for an A
-	    record which is known to not existing, such as
-	    non-existent.test.example.com.  Set the DO bit in the
-	  outgoing query.</t>
+	    record which is known to not exist in an NSEC signed zone,
+	    such as non-existent.test.example.com.  Set the DO bit in
+	    the outgoing query.</t>
 	  <t>SUCCESS: A DNS response was received that contains an
 	    NSEC record.</t>
          <t>Note: The query issued in this test MUST be sent to a
@@ -381,9 +381,9 @@
 	  domain in a DNSSEC signed zone.</t>
 	  <t>Pre-requisite: "Supports the DO bit."</t>
 	  <t>Test: Send a request to the resolver under test for an A
-	  record which is known to be non-existent, such as
-	  non-existent.nsec3-ns.test.example.com.  Set the DO bit in the
-	  outgoing query.</t>
+	  record which is known to be non-existent in a zone signed
+	  using NSEC3, such as non-existent.nsec3-ns.test.example.com.
+	  Set the DO bit in the outgoing query.</t>
 	  <t>SUCCESS: A DNS response was received that contains an
 	  NSEC3 record.</t>
 	  <t>Bonus: If the AD bit is set, this validator
@@ -411,7 +411,7 @@
 	  <t> Pre-requisite:  Supports the AD bit.</t> 
 	  <t> Test: ask for data from a broken DNSSEC delegation such
 	  as badsign-a.test.example.com. </t>
-	  <t> SUCCESS: A reply with the Rcode set to SERVFAIL</t> 
+	  <t> SUCCESS: A reply was received with the Rcode set to SERVFAIL</t> 
 	</section>
 	<section title="Supports Unknown RRtypes">
 	  <t> Purpose: Some DNS Resolvers/gateways only support some
@@ -420,8 +420,9 @@
 	  <t> Pre-requisite: "Supports UDP or TCP".</t>
 	  <t> Test: Send a request for recently defined type or
 	  unknown type in the 20000-22000 range, that resolves to a
-	  server that will return answer for all types, such as
-	  alltypes.res.dnssecready.org</t> 
+	  server that will return an answer for all types, such as
+	  alltypes.example.com (a server today that supports this:
+	  alltypes.res.dnssecready.org)</t>
 	  <t>SUCCESS: A DNS response was retrieved that contains the
 	  type requested in the answer section.</t>
 	</section> 
@@ -451,10 +452,10 @@
 	<section title="Support for Remote UDP With Fragmentation">
 	  <t> Purpose: This tests if the local network can
 	    receive fragmented UDP answers</t> 
-	  <t>Pre-requisite: Local UDP > 1500 is possible</t> 
+	  <t>Pre-requisite: Local UDP traffic &gt; 1500 in size is possible</t> 
           <t> Test: A DNS request is sent over UDP to a known
             distant DNS address asking for a record that has answer larger than
-            2000 bytes. Example send a query for the test.example.com/DNSKEY
+            2000 bytes. For example, send a query for the test.example.com/DNSKEY
             record with the DO bit set in the outgoing query. </t>
           <t> Success: A DNS response was received that contains the
             large answer. </t> 
@@ -482,11 +483,11 @@
 	<t>Purpose: These tests can check what algorithm
 	  combinations are supported.</t>
 	<t>Pre-requisite: At least one of above tests has returned
-	  AD bit proving upstream is validating</t> 
+	  the AD bit set proving that the upstream is validating</t> 
 	<t> Test: A DNS request is sent over UDP to the resolver
-	  under test for a known combination of the DS number (N) and
-	  DNSKEY number 
-	  (M) of the form ds-N.alg-M-nsec.test.example.com, for example:
+	  under test for a known combination of the DS algorithm number (N) and
+	  DNSKEY algorithm number 
+	  (M) of the example form ds-N.alg-M-nsec.test.example.com.  Examples:
 
       <figure> <artwork>
           ds-2.alg-13-nsec.test.example.com TXT
@@ -495,15 +496,12 @@
     </artwork> </figure>
     </t>
 	
-	<t> SUCCESS: a DNS response is received with AD bit set with
-	  TXT record in the answer section. </t> 
-	<t> BONUS: AD in response to the examples above demonstrates
-	support for Algorithm 13 and the two DS algorithm(s) with both
-	NSEC and NSEC3 </t>
-	<t> Note: for algorithms 6 and 7 NSEC is not defined thus
-	  query for alg-M-nsec3 is required, similarly NSEC3 is not
+	<t> SUCCESS: a DNS response is received with the AD bit set
+	and with a matching record type in the answer section. </t> 
+	<t> Note: for algorithms 6 and 7, NSEC is not defined thus
+	  query for alg-M-nsec3 is required. Similarly NSEC3 is not
 	  defined for algorithms 1, 3 and 5. Furthermore algorithms 
-	  2, 4, 9, 11 do not have definitions to sign zones. </t> 
+	  2, 4, 9, 11 do not currently have definitions for signed zones. </t> 
       </section>
     </section>
     <section title="Aggregating The Results">
@@ -526,8 +524,8 @@
 	    DNSSEC aware and will make it hard for a Host Validator to
 	    operate behind it. It MAY be usable for querying for data
 	    that is in known insecure sections of the DNS tree.</t>
-	    <t hangText="Not a DNS Resolver:"> This is a bad address
-	    and not used anymore.</t> 
+	    <t hangText="Not a DNS Resolver:"> This is a improperly
+	    behaving resolver and not should not be used at all.</t>
 	    </list> 
 	  </t> 
 	<t> While it would be great if all resolvers fell cleanly into
@@ -538,9 +536,9 @@
 	followed by sub-descriptors of what is not
 	working.
 	<list style="hanging"> 
-	    <t hangText="Unknown:"> Failed Unknown test</t> 
-	    <t hangText="DNAME:"> Failed DNAME test</t> 
-	    <t hangText="NSEC3:"> Failed NSEC3 test</t> 
+	    <t hangText="Unknown:"> Failed the Unknown test</t> 
+	    <t hangText="DNAME:"> Failed the DNAME test</t> 
+	    <t hangText="NSEC3:"> Failed the NSEC3 test</t> 
 	    <t hangText="TCP:"> TCP not available </t> 
 	    <t hangText="SlowBig:"> UDP is size limited but TCP
 	    fallback works</t> 
@@ -566,33 +564,36 @@
 
       <figure> <artwork>
 
-    If the resolver is labeled as "Validator" or "DNSSEC aware"
+    If the resolver is labeled as "Validator" or "DNSSEC aware":
 
-        Send query through this resolver and perform local
+        Send queries through this resolver and perform local
         validation on the results.
 
         If validation fails, try the next resolver
 
     Else if the resolver is labeled "Not a DNS Resolver" or
-       "Non-DNSSEC capable"
+    "Non-DNSSEC capable":
 
         Mark it as unusable and try next resolver
                       
     Else if no more resolvers are configured and if direct queries 
-    are supported
-        1. Try iterating from Root
+    are supported:
+
+        1. Try iterating from the Root
 
         2. If the answer is SECURE/BOGUS: 
-           - Return the result of the iteration
+           Return the result of the iteration
 
         3. If the answer is INSECURE:
-           - Re-query "Non-DNSSEC capable" servers and return 
+           Re-query "Non-DNSSEC capable" servers and return 
            answers from them w/o the AD bit set to the client.
 
         This will increase the likelihood that split-view unsigned
         answers are found.
     
-    Else return an error code and log a failure
+    Else:
+
+        Return an error code and log a failure
 
       </artwork></figure>
 
@@ -610,12 +611,12 @@
       refreshed when an error is encountered as described below. </t> 
 
       <t>For a stub resolver, problems with the name server
-        can manifest themselves as the following types of error
+        can manifest themselves under the following types of error
         conditions:</t>
 
       <t> <list style="symbols">
-          <t>No response/error response or missing DNSSEC meta-data.</t>
-          <t>Illegal Response, which prevents the validator from
+          <t>No Response, error response or missing DNSSEC meta-data</t>
+          <t>Illegal Response: An illegal response is received, which prevents the validator from
             fetching all necessary records required for constructing an
             authentication chain. This could result when referral loops
             are encountered, when any of the antecedent zone delegations are lame, 
@@ -623,7 +624,7 @@
             DNSKEYs or DS records), or when resource records for certain
             types (e.g. DS) are returned from a zone that is not authoritative
             for such records.</t> 
-          <t>Bogus Response, when the cryptographic assertions in the
+          <t>Bogus Response: A Bogus Response is received, when the cryptographic assertions in the
             authentication chain do not validate properly. </t> 
       </list> </t>
     
@@ -633,11 +634,11 @@
       attempts. </t> 
 
       <t><list style="symbols">
-        <t>No response, error response, or missing DNSSEC meta-data
+        <t>No response, error response, or missing DNSSEC meta-data:
         <list style="symbols">
             <t> Re-try with different EDNS0 sizes (4096, 1492, None) </t>
             <t> Re-try with TCP only </t>
-            <t> Perform an iterative query starting from Root if the
+            <t> Perform an iterative query starting from the Root if the
                 previous error was returned from a lookup that had
                 recursion enabled.  </t>
             <t> Re-try using an alternative transport method, if
@@ -647,7 +648,7 @@
 
         <t>Illegal Response
         <list style="symbols">
-            <t> Perform an iterative query starting from Root if the
+            <t> Perform an iterative query starting from the Root if the
                 previous error was returned from a lookup that had
                 recursion enabled.  </t>
             <t> Check if any of the antecedent zones up to the closest
@@ -656,7 +657,7 @@
 
         <t>Bogus Response
         <list style="symbols">
-            <t> Perform an iterative query starting from Root if the
+            <t> Perform an iterative query starting from the Root if the
                 previous error was returned from a lookup that had
                 recursion enabled.  </t>
         </list> </t>
@@ -664,8 +665,8 @@
 
       <t> For each fallback technique, attempts to multiple potential
       name servers should be skewed such that the next name server is
-      tried when the previous one encounters an error or a timeout is
-      reached, whichever is earlier. </t> 
+      tried when the previous one encounters an error, a timeout is
+      reached, or whichever is earlier. </t> 
 
       <t> The validator SHOULD remember, in its zone-specific fallback
       cache, any broken behavior identified for a particular zone for 
@@ -720,7 +721,7 @@
 	<t>Changing Network Properties: A newly established network
 	connection may change state shortly after a HTTP-based pay-wall
 	authentication system has been used.  This especially common
-	in hotel networks, where DNSSEC, validation and even DNS
+	in hotel, airport and coffee-shop style networks, where DNSSEC, validation and even DNS
 	are not functional until the user proceeds through a series of
 	forced web pages used to enable their network.  The tests in <xref
 	target="tests" /> will produce very different results before and
@@ -745,27 +746,27 @@
       </list>
       </t>
       <section title="What To Do">
-	<t>If Host Validator detects that DNSSEC resolution is not
+	<t>If the Host Validator detects that DNSSEC resolution is not
 	possible it SHOULD log the event and/or SHOULD report an error
-	to the user. In the case there is no user no reporting can be
-	performed thus the device MAY have a policy of action, like
+	to the user. In the case there is no user, then no reporting can be
+	performed and thus the device MAY have a policy of action, like
 	continue or fail. Until middle boxes allow DNSSEC protected
 	information to traverse them consistently, software
 	implementations may need to offer this choice to let users
 	pick the security level they require.  Note that continuing
 	without DNSSEC protection in the absence of a notification or
 	report could lead to situations where users assume a level of
-	security does not exist.</t>
+	security that does not exist.</t>
       </section>
     </section>
 
     <section title="Quick Test"> 
-      <t>The quick tests defined below make the following assumption
-	that the questions are asked of a real resolver and the only
+      <t>The quick tests defined below make the assumption
+	that the questions to be asked are of a real resolver and the only
 	real question is: "how complete is the DNSSEC support?".
 	This quick test as been implemented in few programs developed
 	at IETF hackthons at IETF-91 and IETF-92. The programs use a
-	common grading method, for each question that returns expected
+	common grading method.  For each question that returns expected
 	answer the resolver gets a point. If the AD bit is set as
 	expected the resolver gets a second point. 
       </t>
@@ -784,7 +785,7 @@
       </section>
       <section title="Fails when DNSSEC does not validate"> 
 	<t> Query: dnssec-failed.test.example.com. SOA </t> 
-	<t> Answer: RCODE=SERVFAIL, empty answer, and authority,
+	<t> Answer: RCODE= SERVFAIL, empty answer, and authority,
 	AD=0</t> 
       </section>
     </section>
@@ -803,7 +804,7 @@
     
    <section title="Acknowledgments">
 
-     <t>We thank Petr Spacek for extensive comments and suggestions. 
+     <t>We thank the IESG and DNSOP working group members for their extensive comments and suggestions. 
       </t> 
     </section> 
     
